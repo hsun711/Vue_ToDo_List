@@ -1,0 +1,145 @@
+@import "../common/_variable.scss";
+
+.imgLiquidFill {
+  img {
+    display: none;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.container {
+  max-width: calc(100% - 50px) !important;
+}
+
+@media (max-width: 576px) {
+  .container {
+    max-width: 100% !important;
+  }
+}
+
+#headernav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10vmin;
+  h1 {
+    color: rgb(65, 65, 131);
+  }
+  .navtag {
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+    border: 2px solid black;
+    border-radius: 10px;
+  }
+}
+
+#routerPage {
+  width: 70%;
+  margin: 7vmin auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/////////////// Add page ///////////////
+#addPage {
+  #addTask {
+    display: flex;
+    margin-bottom: 3vmin;
+    width: 100%;
+    height: 7vmin;
+    justify-content: space-around;
+    align-items: center;
+    .task {
+      input {
+        width: 30vmin;
+        height: 5vmin;
+      }
+    }
+  }
+
+  .taskArea {
+    margin-top: 5vmin;
+    ul {
+      li {
+        margin-top: 2vmin;
+        display: flex;
+        align-items: center;
+        p {
+          // margin: auto 0px;
+          margin: 0 1rem;
+        }
+        i {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+  .addtodoBtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+#taskType {
+  form {
+    select {
+      height: 5vmin;
+    }
+  }
+}
+
+/////////////// Todo page ///////////////
+#eachTask {
+  .taskTitle {
+    display: flex;
+    align-items: center;
+    h1 {
+      margin: auto 1rem;
+    }
+  }
+
+  .taskList {
+    margin-top: 1rem;
+    li {
+      margin: 1rem 0;
+      .checked {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        h4 {
+          margin: auto 0;
+          &:hover {
+            text-decoration: line-through;
+            cursor: pointer;
+          }
+        }
+        p {
+          margin: auto 0;
+          color: gray;
+        }
+      }
+      //   form {
+      //     display: flex;
+      //     align-items: center;
+      //     // outline: 1px solid red;
+      //     input {
+      //       //   outline: 1px solid blue;
+      //       margin: 0.5rem;
+      //     }
+      //     h4 {
+      //       margin: auto 0;
+      //     }
+      //     p {
+      //       //   outline: 1px solid green;
+      //       margin: auto 1rem;
+      //       color: gray;
+      //     }
+      //   }
+    }
+  }
+}
