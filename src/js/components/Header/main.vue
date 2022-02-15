@@ -5,12 +5,18 @@
             <router-link class="nav-link" :to="{ name: 'Add_page'}">
                 <span>Add page</span>
             </router-link>
-            <router-link class="nav-link" :to="{ name: 'Todo_page'}">
+            <router-link class="nav-link" :to="{ name: 'Todo_page', query:{name:'Todo'}}">
+                <span>Todo page</span>
+            </router-link>
+            <router-link class="nav-link" :to="{ name: 'Done_page', query:{name:'Done'}}">
+                <span>Done page</span>
+            </router-link>
+            <!-- <router-link class="nav-link" :to="{ name: 'Todo_page'}">
                 <span>Todo page</span>
             </router-link>
             <router-link class="nav-link" :to="{ name: 'Done_page'}">
                 <span>Done page</span>
-            </router-link>
+            </router-link> -->
         </div>
     </div>
 </template>

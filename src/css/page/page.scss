@@ -105,22 +105,37 @@
 
   .taskList {
     margin-top: 1rem;
+    width: 85%;
     li {
       margin: 1rem 0;
       .checked {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        h4 {
-          margin: auto 0;
-          &:hover {
-            text-decoration: line-through;
+        .editText {
+          display: flex;
+          h4 {
+            margin: auto 0.5rem;
+            &:hover {
+              text-decoration: line-through;
+              cursor: pointer;
+            }
+          }
+          i {
+            margin: auto 0;
             cursor: pointer;
           }
         }
-        p {
-          margin: auto 0;
-          color: gray;
+        .editDate {
+          display: flex;
+          p {
+            margin: auto 0.5rem;
+            color: gray;
+          }
+          i {
+            margin: auto 0;
+            cursor: pointer;
+          }
         }
       }
       //   form {

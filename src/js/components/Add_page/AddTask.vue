@@ -41,9 +41,6 @@
                     <h3>{{ item.taskName }}</h3>
                     <p>{{ item.expDate }}</p>
                     <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
-                    <!-- <input v-show="isChange" v-model="changeTask" type="text">
-                    <i v-show="!isChange" class="fa-solid fa-pen" @click="changeText(index)"></i>
-                    <i v-show="isChange" class="fa-solid fa-circle-check" @click="changeOk(index)"></i> -->
                 </li>
             </ul>
         </div>
@@ -60,6 +57,8 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import { localStorage } from 'lib/common/util';
+import { v4 as uuidv4 } from 'uuid';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -96,26 +95,27 @@ export default {
         ...mapActions({}),
         ...mapMutations({}),
         addTask(){
+            const taskid = uuidv4();
             if (this.inputTask === '') {
-                alert('請輸入任務名稱');
+                Swal.fire('請輸入任務名稱');
                 return;
             }
             if (this.taskType === '') {
-                alert('請選擇任務分類');
+                Swal.fire('請選擇任務分類');
                 return;
             }
             if (this.expDate === '') {
-                alert('請選擇到期日');
+                Swal.fire('請選擇到期日');
                 return;
             }
-            this.tasksArr.push({ taskName: this.inputTask, taskType: this.taskType, expDate: this.expDate, isDone: false });
+            this.tasksArr.push({ taskName: this.inputTask, taskType: this.taskType, expDate: this.expDate, isDone: false, id: taskid });
             this.inputTask = '';
             this.taskType = '';
             this.expDate = '';
         },
         removeTask(index){
             this.tasksArr.splice(index, 1);
-            console.log(this.tasksArr);
+            // console.log(this.tasksArr);
         },
         // changeText(index){
         //     this.isChange = true;
@@ -127,13 +127,13 @@ export default {
         // },
         sendTodos(){
             if (this.tasksArr.length < 1) {
-                alert('請輸入任務');
+                Swal.fire('請輸入任務');
                 return;
             }
             const oldTodos = JSON.parse(localStorage.get('todos'));
             oldTodos.push(...this.tasksArr);
             localStorage.set('todos', JSON.stringify(oldTodos));
-            alert('已送出任務清單，可到 Todo page 查看');
+            Swal.fire('已送出任務清單，可到 Todo page 查看');
             this.tasksArr = '';
         },
     },

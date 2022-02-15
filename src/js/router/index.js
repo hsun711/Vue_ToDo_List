@@ -10,14 +10,14 @@ const routes = [
         component: () => import('components/Add_page/main.vue'),
     },
     {
-        path: '/todo',
+        path: '/task',
         name: 'Todo_page',
         component: () => import('components/Todo_page/main.vue'),
     },
     {
-        path: '/done',
+        path: '/task',
         name: 'Done_page',
-        component: () => import('components/Done_page/main.vue'),
+        component: () => import('components/Todo_page/main.vue'),
     },
 ];
 
