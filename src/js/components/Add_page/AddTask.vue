@@ -78,8 +78,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters([
-        ]),
+        ...mapGetters([]),
     },
     watch: {
     },
@@ -115,16 +114,8 @@ export default {
         },
         removeTask(index){
             this.tasksArr.splice(index, 1);
-            // console.log(this.tasksArr);
         },
-        // changeText(index){
-        //     this.isChange = true;
-        //     console.log(index);
-        // },
-        // changeOk(index){
-        //     this.isChange = false;
-        //     console.log(index);
-        // },
+
         sendTodos(){
             if (this.tasksArr.length < 1) {
                 Swal.fire('請輸入任務');

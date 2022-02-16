@@ -4,12 +4,27 @@ export default {
     PageSetting_width: state => state.PageSetting_width,
     PageSetting_mode_type: state => state.PageSetting_mode_type,
 
-    todos: state => state.todos,
-    todos_done: (state) =>{
-        return state.todos.filter((item) => {
-            return item.done === true;
-        });
+
+    itemsNotDone(state){
+        return state.todos.filter(item => item.isDone === false);
     },
 
-    lang: state => state.lang,
+    itemsDone(state){
+        return state.todos.filter(item => item.isDone === true);
+    },
+
+    itemsID(state){
+        return id => state.todos.filter(item => item.id === id);
+    },
+
+    otherItemsID(state){
+        return (id) => {
+            const result = state.todos.filter((item) => {
+                const other = item.id === id;
+                return !other;
+            });
+            return result;
+        };
+    },
+
 };

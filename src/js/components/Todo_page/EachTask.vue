@@ -5,7 +5,7 @@
                 <i v-show="isShow" class="fa-regular fa-square-caret-down" @click="handleShow"></i>
                 <i v-show="!isShow" class="fa-regular fa-square-caret-up" @click="handleShow"></i>
             </div>
-            <h1>{{ this.$route.query.name }} Tasks: </h1>
+            <h1>{{ this.$route.query.name }} Tasks:</h1>
         </div>
         <ul class="taskList">
             <li v-for="item in taskisdone[0]" v-show="isShow" :key="item.taskName">
@@ -42,28 +42,20 @@ export default {
             taskName: '',
             isShow: true,
             isDone: false,
-            doneTask:[],
-            tasksArr: [],
+            doneTask: [],
         };
     },
     computed: {
-        ...mapGetters([
-        ]),
+        ...mapGetters(['itemsID', 'otherItemsID']),
         taskisdone(){
             let tasks = [];
             switch (this.$route.query.name) {
                 case 'Todo':
-                    this.tasksArr.filter((items) => {
-                        const result = items.filter(item => item.isDone === false);
-                        tasks.push(result);
-                    });
+                    tasks.push(this.$store.getters['itemsNotDone'])
                     this.isDone = true;
                     break;
                 case 'Done':
-                    this.tasksArr.filter((items) => {
-                        const result = items.filter(item => item.isDone === true);
-                        tasks.push(result);
-                    });
+                    tasks.push(this.$store.getters['itemsDone'])
                     this.isDone = false;
                     break;
                 default:
@@ -76,30 +68,26 @@ export default {
     },
     created(){},
     mounted(){
-        const tasks = JSON.parse(localStorage.get('todos'));
-        this.tasksArr.push(tasks);
+        this.getTodoList();
     },
     updated(){},
     destroyed(){},
     methods: {
-        ...mapActions({}),
+        ...mapActions({
+            getTodoList: 'getTodoList',
+        }),
         ...mapMutations({}),
         handleShow(){
             this.isShow = !this.isShow;
         },
         turnDone(id){
-            const task = this.tasksArr.filter((items) => {
-                const result = items.filter((item) => {
-                    return item.id === id;
-                })
-                result[0].isDone = true;
-                return result;
-            })
-
-            localStorage.set('todos', JSON.stringify(task[0]));
+            const itemid = this.itemsID(id);
+            itemid[0].isDone = true;
+            const newTaskArr = [...this.otherItemsID(id), ...itemid];
+            localStorage.set('todos', JSON.stringify(newTaskArr));
         },
-        async editTask(id){
-            
+
+        async editTask(id){ 
             const { value: formValues } = await Swal.fire({
                 title: '輸入任務名稱及日期',
                 html:
@@ -113,59 +101,43 @@ export default {
                     ]
                 }
             })
+
+            console.log(formValues);
             
-            if(formValues[0] === '') {
-                const newTask = this.tasksArr.filter((items) => {
-                    const result = items.filter((item) => {
-                        return item.id === id;
-                    })
-                    result[0].expDate = formValues[1];
-                    return result;
-                    })
-                localStorage.set('todos', JSON.stringify(newTask[0]));
-            }else if(formValues[1] === '') {
-                const newTask = this.tasksArr.filter((items) => {
-                    const result = items.filter((item) => {
-                        return item.id === id;
-                    })
-                    result[0].taskName = formValues[0];
-                    return result;
-                    })
-                localStorage.set('todos', JSON.stringify(newTask[0]));
-            }else{
-                const newTask = this.tasksArr.filter((items) => {
-                    const result = items.filter((item) => {
-                        return item.id === id;
-                    })
-                    result[0].taskName = formValues[0];
-                    result[0].expDate = formValues[1];
-                    return result;
-                })
-                localStorage.set('todos', JSON.stringify(newTask[0]));
-            }
-            // if(task === ''){
-            //     Swal.fire('請輸入任務名稱');
-            // } else {
+            // if(formValues[0] === '') {
             //     const newTask = this.tasksArr.filter((items) => {
             //         const result = items.filter((item) => {
             //             return item.id === id;
             //         })
-            //         result[0].taskName = task;
+            //         result[0].expDate = formValues[1];
             //         return result;
             //         })
             //     localStorage.set('todos', JSON.stringify(newTask[0]));
+            // }else if(formValues[1] === '') {
+            //     const newTask = this.tasksArr.filter((items) => {
+            //         const result = items.filter((item) => {
+            //             return item.id === id;
+            //         })
+            //         result[0].taskName = formValues[0];
+            //         return result;
+            //         })
+            //     localStorage.set('todos', JSON.stringify(newTask[0]));
+            // }else{
+            //     const newTask = this.tasksArr.filter((items) => {
+            //         const result = items.filter((item) => {
+            //             return item.id === id;
+            //         })
+            //         result[0].taskName = formValues[0];
+            //         result[0].expDate = formValues[1];
+            //         return result;
+            //     })
+            //     localStorage.set('todos', JSON.stringify(newTask[0]));
             // }
-
         },
+
         removeTask(id){
-            const newTask = this.tasksArr.filter((items) => {
-                const result = items.filter((item) => {
-                    return item.id === id;
-                })
-                this.tasksArr[0].splice(this.tasksArr[0].indexOf(result[0]),1)
-                return result;
-            })
-            localStorage.set('todos', JSON.stringify(newTask[0]));
+            const itemID = this.itemsID(id);
+            this.$store.commit('removeTask', itemID)
         },
     },
 };
