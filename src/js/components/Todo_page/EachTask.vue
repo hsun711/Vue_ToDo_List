@@ -27,14 +27,11 @@
 </template>
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import DatePicker from 'vue2-datepicker';
 import { localStorage } from 'lib/common/util';
 import Swal from 'sweetalert2';
 
 export default {
-    components: {
-        DatePicker
-    },
+    components: {},
     filters: {},
     props: {},
     data(){
@@ -42,6 +39,7 @@ export default {
             taskName: '',
             isShow: true,
             isDone: false,
+            isEdit: false,
             doneTask: [],
         };
     },
@@ -92,47 +90,18 @@ export default {
                 title: '輸入任務名稱及日期',
                 html:
                     '<input id="swal-input1" class="swal2-input" placeholder="任務名稱">'+
-                    '<input id="swal-input2" class="swal2-input" placeholder="完成日期">',
+                    '<input type="date" id="datepick" class="swal2-input">',
                 focusConfirm: false,
                 preConfirm: () => {
-                    return [
-                        document.getElementById('swal-input1').value,
-                        document.getElementById('swal-input2').value
-                    ]
+                    return {
+                        task: document.getElementById('swal-input1').value,
+                        date: document.getElementById('datepick').value
+                    }
                 }
             })
 
-            console.log(formValues);
-            
-            // if(formValues[0] === '') {
-            //     const newTask = this.tasksArr.filter((items) => {
-            //         const result = items.filter((item) => {
-            //             return item.id === id;
-            //         })
-            //         result[0].expDate = formValues[1];
-            //         return result;
-            //         })
-            //     localStorage.set('todos', JSON.stringify(newTask[0]));
-            // }else if(formValues[1] === '') {
-            //     const newTask = this.tasksArr.filter((items) => {
-            //         const result = items.filter((item) => {
-            //             return item.id === id;
-            //         })
-            //         result[0].taskName = formValues[0];
-            //         return result;
-            //         })
-            //     localStorage.set('todos', JSON.stringify(newTask[0]));
-            // }else{
-            //     const newTask = this.tasksArr.filter((items) => {
-            //         const result = items.filter((item) => {
-            //             return item.id === id;
-            //         })
-            //         result[0].taskName = formValues[0];
-            //         result[0].expDate = formValues[1];
-            //         return result;
-            //     })
-            //     localStorage.set('todos', JSON.stringify(newTask[0]));
-            // }
+            const data = {id, formValues}
+            this.$store.commit('editTask', data)
         },
 
         removeTask(id){

@@ -22,9 +22,23 @@ export default {
         state.todos = todos;
     },
 
+    addTodo(state, tasks){
+        state.addtodos = tasks;
+    },
+
     removeTask(state, payload){
         state.todos.splice(state.todos.indexOf(...payload), 1);
         localStorage.set('todos', JSON.stringify(state.todos));
     },
 
+    editTask(state, payload){
+        const changeTodo = state.todos.filter(todo => todo.id === payload.id);
+        if (payload.formValues.date !== '') {
+            changeTodo[0].expDate = payload.formValues.date;
+        }
+        if (payload.formValues.task !== '') {
+            changeTodo[0].taskName = payload.formValues.task;
+        }
+        localStorage.set('todos', JSON.stringify(state.todos));
+    },
 };

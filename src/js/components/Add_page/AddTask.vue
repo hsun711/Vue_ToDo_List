@@ -79,6 +79,9 @@ export default {
     },
     computed: {
         ...mapGetters([]),
+        // todoArr(){
+        //     return this.$store.state.addtodos;
+        // },
     },
     watch: {
     },
