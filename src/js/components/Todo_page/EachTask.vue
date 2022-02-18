@@ -12,7 +12,7 @@
             <li v-for="item in taskisdone[0]" v-show="isShow" :key="item.taskName">
                 <div class="checked">
                     <div :class="type[`${item.taskType}`]">
-                        <h4 @click="turnDone(item.id)" :class="[]">
+                        <h4 @click="turnDone(item.id)">
                             {{ item.taskName }}
                         </h4>
                     </div>
