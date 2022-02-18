@@ -7,12 +7,13 @@
             </div>
             <h1>{{ this.$route.query.name }} Tasks:</h1>
         </div>
+        {{ taskAlert }}
         <ul class="taskList">
             <li v-for="item in taskisdone[0]" v-show="isShow" :key="item.taskName">
                 <div class="checked">
-                    <div class="editText">
-                        <h4 @click="turnDone(item.id)">
-                        {{ item.taskName }}
+                    <div :class="type[`${item.taskType}`]">
+                        <h4 @click="turnDone(item.id)" :class="[]">
+                            {{ item.taskName }}
                         </h4>
                     </div>
                     <div class="editDate">
@@ -31,20 +32,21 @@ import { localStorage } from 'lib/common/util';
 import Swal from 'sweetalert2';
 
 export default {
-    components: {},
-    filters: {},
-    props: {},
     data(){
         return {
-            taskName: '',
             isShow: true,
             isDone: false,
-            isEdit: false,
-            doneTask: [],
+            isExp: false,
+            type: {
+                work: 'editText work',
+                home: 'editText home',
+                friend: 'editText friend',
+                other: 'editText other',
+            }
         };
     },
     computed: {
-        ...mapGetters(['itemsID', 'otherItemsID']),
+        ...mapGetters(['itemsID', 'otherItemsID','expAlert']),
         taskisdone(){
             let tasks = [];
             switch (this.$route.query.name) {
@@ -61,15 +63,14 @@ export default {
             }
             return tasks;
         },
+        taskAlert(){
+           console.log(this.expAlert);
+           console.log(this.$store.getters['itemsNotDone']);
+        },
     },
-    watch: {
-    },
-    created(){},
     mounted(){
         this.getTodoList();
     },
-    updated(){},
-    destroyed(){},
     methods: {
         ...mapActions({
             getTodoList: 'getTodoList',

@@ -112,8 +112,25 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .editText {
           display: flex;
+          &.work {
+            background-color: bisque;
+          }
+          &.home {
+            background-color: #63cdda;
+          }
+          &.friend {
+            background-color: #9aecdb;
+          }
+          &.other {
+            background-color: #ffcccc;
+          }
+          .exp {
+            color: red;
+            font-size: 3rem;
+          }
           h4 {
             margin: auto 0.5rem;
             &:hover {

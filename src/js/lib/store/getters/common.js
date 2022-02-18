@@ -27,4 +27,10 @@ export default {
         };
     },
 
+    expAlert(state){
+        const date = new Date();
+        const today = date.toISOString().slice(0, 10);
+        return state.todos.filter(item => item.expDate === today);
+    },
+
 };
