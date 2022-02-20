@@ -37,7 +37,7 @@
         </div>
         <div class="taskArea">
             <ul>
-                <li v-for="(item, index) in tasksArr" :key="item.taskName">
+                <li v-for="(item, index) in todoArr" :key="item.taskName">
                     <h3>{{ item.taskName }}</h3>
                     <p>{{ item.expDate }}</p>
                     <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
@@ -70,7 +70,6 @@ export default {
         return {
             titleName: '',
             inputTask: '',
-            tasksArr: [],
             isChange: false,
             changeTask: '',
             taskType: '',
@@ -79,20 +78,15 @@ export default {
     },
     computed: {
         ...mapGetters([]),
-        // todoArr(){
-        //     return this.$store.state.addtodos;
-        // },
+        todoArr(){
+            return this.$store.state.addtodos;
+        },
     },
-    watch: {
-    },
-    created(){},
     mounted(){
         if (!localStorage.get('todos')) {
             localStorage.set('todos', JSON.stringify([]));
         }
     },
-    updated(){},
-    destroyed(){},
     methods: {
         ...mapActions({}),
         ...mapMutations({}),
@@ -110,25 +104,27 @@ export default {
                 Swal.fire('請選擇到期日');
                 return;
             }
-            this.tasksArr.push({ taskName: this.inputTask, taskType: this.taskType, expDate: this.expDate, isDone: false, id: taskid });
+
+            const data = { taskName: this.inputTask, taskType: this.taskType, expDate: this.expDate, isDone: false, id: taskid };
+            this.$store.commit('addTodo', data);
             this.inputTask = '';
             this.taskType = '';
             this.expDate = '';
         },
         removeTask(index){
-            this.tasksArr.splice(index, 1);
+            this.todoArr.splice(index, 1);
         },
 
         sendTodos(){
-            if (this.tasksArr.length < 1) {
+            if (this.todoArr.length < 1) {
                 Swal.fire('請輸入任務');
                 return;
             }
             const oldTodos = JSON.parse(localStorage.get('todos'));
-            oldTodos.push(...this.tasksArr);
+            oldTodos.push(...this.$store.state.addtodos);
             localStorage.set('todos', JSON.stringify(oldTodos));
             Swal.fire('已送出任務清單，可到 Todo page 查看');
-            this.tasksArr = '';
+            this.$store.state.addtodos = [];
         },
     },
 };

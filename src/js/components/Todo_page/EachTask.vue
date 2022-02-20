@@ -7,7 +7,7 @@
             </div>
             <h1>{{ this.$route.query.name }} Tasks:</h1>
         </div>
-        {{ taskAlert }}
+        <!-- {{ taskAlert }} -->
         <ul class="taskList">
             <li v-for="item in taskisdone[0]" v-show="isShow" :key="item.taskName">
                 <div class="checked">

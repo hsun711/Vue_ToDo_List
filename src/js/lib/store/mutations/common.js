@@ -23,7 +23,7 @@ export default {
     },
 
     addTodo(state, tasks){
-        state.addtodos = tasks;
+        state.addtodos.push(tasks);
     },
 
     removeTask(state, payload){
