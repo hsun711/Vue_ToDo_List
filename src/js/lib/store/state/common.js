@@ -4,4 +4,5 @@ export default {
 
     addtodos: [],
     todos: [],
+    selectTag: [],
 };

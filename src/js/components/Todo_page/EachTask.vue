@@ -1,5 +1,10 @@
 <template>
     <div id="eachTask">
+        <div class="itemTag">
+            <ul v-for="item in itemTag" :key="item" :class="isTagActive">
+                <li @click="changeTag(item)">#{{ item }}</li>
+            </ul>
+        </div>
         <div class="taskTitle">
             <div class="menuicon" style="font-size: 2rem;">
                 <i v-show="isShow" class="fa-regular fa-square-caret-down" @click="handleShow"></i>
@@ -7,13 +12,13 @@
             </div>
             <h1>{{ this.$route.query.name }} Tasks:</h1>
         </div>
-        <!-- {{ taskAlert }} -->
         <ul class="taskList">
-            <li v-for="item in taskisdone[0]" v-show="isShow" :key="item.taskName">
+            <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.taskName">
                 <div class="checked">
                     <div :class="type[`${item.taskType}`]">
-                        <h4 @click="turnDone(item.id)">
+                        <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
                             {{ item.taskName }}
+                            {{ item.taskTag }}
                         </h4>
                     </div>
                     <div class="editDate">
@@ -27,6 +32,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import { localStorage } from 'lib/common/util';
 import Swal from 'sweetalert2';
@@ -42,38 +48,66 @@ export default {
                 home: 'editText home',
                 friend: 'editText friend',
                 other: 'editText other',
-            }
+            },
         };
     },
     computed: {
-        ...mapGetters(['itemsID', 'otherItemsID','expAlert']),
-        taskisdone(){
+        ...mapGetters(['itemsID', 'otherItemsID','getItemTag', 'itemsNotDone', 'itemsDone']),
+        taskList(){
             let tasks = [];
             switch (this.$route.query.name) {
                 case 'Todo':
-                    tasks.push(this.$store.getters['itemsNotDone'])
+                    tasks = this.itemsNotDone;
                     this.isDone = true;
                     break;
                 case 'Done':
-                    tasks.push(this.$store.getters['itemsDone'])
+                    tasks = this.itemsDone;
                     this.isDone = false;
                     break;
                 default:
                     break;
             }
+
+            const today = moment().format('YYYY-MM-DD');
+            tasks.map((task) => {
+                return task.isToday = task.expDate === today;
+            })
+
+            tasks.map((task) => {
+                const selectTag = this.$store.state.selectTag;
+                if (selectTag.length === 0){
+                    return task.isTag = true;
+                } else {
+                    selectTag.map((item) => {
+                        let reg = new RegExp(item);
+                        if(task.taskTag.match(reg)){
+                            return task.isTag = true;
+                        } else {
+                            return task.isTag = false;
+                        }
+                    })
+                }
+            })
+
             return tasks;
         },
-        taskAlert(){
-           console.log(this.expAlert);
-           console.log(this.$store.getters['itemsNotDone']);
+
+        itemTag(){
+            return this.getItemTag;
         },
+
+        isTagActive(){
+           const tag = this.$store.state.selectTag;
+           console.log(tag);
+        }
+        
     },
     mounted(){
         this.getTodoList();
     },
     methods: {
         ...mapActions({
-            getTodoList: 'getTodoList',
+            getTodoList: 'getTodoList', 
         }),
         ...mapMutations({}),
         handleShow(){
@@ -109,6 +143,11 @@ export default {
             const itemID = this.itemsID(id);
             this.$store.commit('removeTask', itemID)
         },
+
+        changeTag(item){
+            this.$store.commit('chooseTag',item);
+        },
+
     },
 };
 </script>

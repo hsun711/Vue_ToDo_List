@@ -41,4 +41,13 @@ export default {
         }
         localStorage.set('todos', JSON.stringify(state.todos));
     },
+
+    chooseTag(state, tag){
+        if (state.selectTag.includes(tag)) {
+            const idx = state.selectTag.indexOf(tag);
+            state.selectTag.splice(idx, 1);
+        } else {
+            state.selectTag.push(tag);
+        }
+    },
 };

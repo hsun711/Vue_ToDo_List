@@ -27,10 +27,15 @@ export default {
         };
     },
 
-    expAlert(state){
-        const date = new Date();
-        const today = date.toISOString().slice(0, 10);
-        return state.todos.filter(item => item.expDate === today);
+    getItemTag(state){
+        const tagArr = state.todos.map((todo) => {
+            const tags = todo.taskTag.split(',');
+            return tags;
+        });
+        const newTag = tagArr.reduce((allTag, tag) => allTag.concat(tag), []);
+        const allTags = newTag.filter((element, index, arr) => arr.indexOf(element) === index);
+
+        return allTags;
     },
 
 };

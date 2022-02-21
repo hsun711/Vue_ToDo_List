@@ -33,6 +33,13 @@
             <date-picker v-model="expDate" placeholder="完成日期" value-type="format">
                 {{ expDate }}
             </date-picker>
+            <div>
+                <input v-model="inputTag"
+                    class="task"
+                    type="text"
+                    placeholder="請輸入備註"
+                >
+            </div>
             <i class="fa-regular fa-square-plus fa-2x" @click="addTask"></i>
         </div>
         <div class="taskArea">
@@ -40,6 +47,7 @@
                 <li v-for="(item, index) in todoArr" :key="item.taskName">
                     <h3>{{ item.taskName }}</h3>
                     <p>{{ item.expDate }}</p>
+                    <p>{{ item.taskTag }}</p>
                     <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
                 </li>
             </ul>
@@ -54,9 +62,9 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { localStorage } from 'lib/common/util';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
-import { localStorage } from 'lib/common/util';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
@@ -70,6 +78,7 @@ export default {
         return {
             titleName: '',
             inputTask: '',
+            inputTag: '',
             isChange: false,
             changeTask: '',
             taskType: '',
@@ -82,11 +91,7 @@ export default {
             return this.$store.state.addtodos;
         },
     },
-    mounted(){
-        if (!localStorage.get('todos')) {
-            localStorage.set('todos', JSON.stringify([]));
-        }
-    },
+    mounted(){},
     methods: {
         ...mapActions({}),
         ...mapMutations({}),
@@ -105,8 +110,16 @@ export default {
                 return;
             }
 
-            const data = { taskName: this.inputTask, taskType: this.taskType, expDate: this.expDate, isDone: false, id: taskid };
+            const data = {
+                taskName: this.inputTask,
+                taskType: this.taskType,
+                expDate: this.expDate,
+                isDone: false,
+                id: taskid,
+                taskTag: this.inputTag,
+            };
             this.$store.commit('addTodo', data);
+            this.inputTag = '';
             this.inputTask = '';
             this.taskType = '';
             this.expDate = '';

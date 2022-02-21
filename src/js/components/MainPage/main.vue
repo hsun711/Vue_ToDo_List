@@ -8,15 +8,11 @@
 </template>
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { localStorage } from 'lib/common/util';
 import Header from '../Header/main.vue';
 
 
 const pc_min_size = 567;
-// import $ from 'jquery';
-// import 'bootstrap';
-
-// import 'app';
-// import { string, jsVars, popup, trackJS, localStorage, ppPanel } from 'lib/common/util';
 
 export default {
     components: {
@@ -37,11 +33,13 @@ export default {
         },
     },
     watch: {
-
     },
     created(){},
     mounted(){
         this.init();
+        if (!localStorage.get('todos')) {
+            localStorage.set('todos', JSON.stringify([]));
+        }
     },
     updated(){},
     destroyed(){},

@@ -95,6 +95,18 @@
 
 /////////////// Todo page ///////////////
 #eachTask {
+  .itemTag {
+    display: flex;
+    color: gray;
+    .active {
+      color: rgb(241, 78, 78);
+    }
+    li {
+      list-style: none;
+      cursor: pointer;
+    }
+  }
+
   .taskTitle {
     display: flex;
     align-items: center;
@@ -129,7 +141,7 @@
           }
           .exp {
             color: red;
-            font-size: 3rem;
+            font-size: 2rem;
           }
           h4 {
             margin: auto 0.5rem;
