@@ -1,23 +1,22 @@
 <template>
     <div id="headernav">
-        <h1>To Do List</h1>
-        <div class="navtag">
-            <router-link class="nav-link" :to="{ name: 'Add_page'}">
-                <span>Add page</span>
-            </router-link>
-            <router-link class="nav-link" :to="{ name: 'Todo_page', query:{name:'Todo'}}">
-                <span>Todo page</span>
-            </router-link>
-            <router-link class="nav-link" :to="{ name: 'Done_page', query:{name:'Done'}}">
-                <span>Done page</span>
-            </router-link>
-            <!-- <router-link class="nav-link" :to="{ name: 'Todo_page'}">
-                <span>Todo page</span>
-            </router-link>
-            <router-link class="nav-link" :to="{ name: 'Done_page'}">
-                <span>Done page</span>
-            </router-link> -->
-        </div>
+        <ul>
+            <li :class="[this.$route.name === 'Todo_page' && !this.$route.query.name ? 'active': '']">
+                <router-link class="nav-link" :to="{ name: 'Todo_page' }">
+                    <span>Todo page</span>
+                </router-link>
+            </li>
+            <li :class="[this.$route.name === 'Todo_page' && this.$route.query.name === 'Done' ? 'active': '']">
+                <router-link class="nav-link" :to="{ name: 'Todo_page', query:{ name:'Done'}}">
+                    <span>Done page</span>
+                </router-link>
+            </li>
+            <li :class="[this.$route.name === 'Add_page' ? 'active': '']">
+                <router-link class="nav-link" :to="{ name: 'Add_page'}">
+                    <i class="fa-solid fa-plus"></i>
+                </router-link>
+            </li>
+        </ul>
     </div>
 </template>
 <script>
@@ -36,10 +35,7 @@ export default {
     },
     watch: {
     },
-    created(){},
     mounted(){},
-    updated(){},
-    destroyed(){},
     methods: {
         ...mapActions({}),
         ...mapMutations({}),

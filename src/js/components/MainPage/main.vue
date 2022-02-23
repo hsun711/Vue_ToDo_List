@@ -36,7 +36,7 @@ export default {
     },
     created(){},
     mounted(){
-        this.init();
+        // this.init();
         if (!localStorage.get('todos')) {
             localStorage.set('todos', JSON.stringify([]));
         }

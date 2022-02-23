@@ -1,24 +1,25 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
 Vue.use(VueRouter);
 
 
 const routes = [
     {
-        path: '/',
+        path: '/Add',
         name: 'Add_page',
         component: () => import('components/Add_page/main.vue'),
     },
     {
-        path: '/task',
+        path: '/',
         name: 'Todo_page',
         component: () => import('components/Todo_page/main.vue'),
     },
-    {
-        path: '/task',
-        name: 'Done_page',
-        component: () => import('components/Todo_page/main.vue'),
-    },
+    // {
+    //     path: '/',
+    //     name: 'Done_page',
+    //     component: () => import('components/Todo_page/main.vue'),
+    // },
 ];
 
 const router = new VueRouter({

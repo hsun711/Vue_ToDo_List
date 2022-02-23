@@ -43,11 +43,14 @@ export default {
     },
 
     chooseTag(state, tag){
-        if (state.selectTag.includes(tag)) {
-            const idx = state.selectTag.indexOf(tag);
-            state.selectTag.splice(idx, 1);
+        const selectTag = JSON.parse(JSON.stringify(state.selectTag));
+        const idx = selectTag.indexOf(tag);
+        if (idx !== -1) {
+            selectTag.splice(idx, 1);
         } else {
-            state.selectTag.push(tag);
+            selectTag.push(tag);
         }
+        state.selectTag = selectTag;
     },
+
 };

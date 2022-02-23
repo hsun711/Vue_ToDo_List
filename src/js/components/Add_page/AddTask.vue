@@ -1,7 +1,9 @@
 <template>
     <div id="addPage">
-        <div id="addTask">
+        <h1>新增項目</h1>
+        <div class="addTask">
             <div class="task">
+                <label for="task">項目名稱：</label>
                 <input id="task"
                     v-model="inputTask"
                     type="text"
@@ -9,11 +11,12 @@
                     placeholder=" New Task "
                 >
             </div>
-            <div id="taskType">
+            <div class="taskType">
                 <form action="get">
+                    <span>任務分類：</span>
                     <select id="type" v-model="taskType" name="type">
                         <option value="">
-                            請選擇任務分類
+                            請選擇
                         </option>
                         <option value="work">
                             工作
@@ -30,32 +33,79 @@
                     </select>
                 </form>
             </div>
-            <date-picker v-model="expDate" placeholder="完成日期" value-type="format">
-                {{ expDate }}
-            </date-picker>
-            <div>
-                <input v-model="inputTag"
+            <div class="taskDate">
+                <span>完成日期：</span>
+                <date-picker v-model="expDate" placeholder="完成日期" value-type="format" class="datePicker">
+                    {{ expDate }}
+                </date-picker>
+            </div>
+            <div class="taskTag">
+                <label for="tag">任務備註：</label>
+                <input id="tag"
+                    v-model="inputTag"
                     class="task"
                     type="text"
                     placeholder="請輸入備註"
                 >
             </div>
-            <i class="fa-regular fa-square-plus fa-2x" @click="addTask"></i>
         </div>
-        <div class="taskArea">
-            <ul>
-                <li v-for="(item, index) in todoArr" :key="item.taskName">
-                    <h3>{{ item.taskName }}</h3>
-                    <p>{{ item.expDate }}</p>
-                    <p>{{ item.taskTag }}</p>
-                    <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
-                </li>
-            </ul>
+        <div v-for="(item,index) in todoArr" :key="item.id" class="addTask">
+            <div class="task">
+                <label for="task">項目名稱：</label>
+                <input id="task"
+                    v-model="item.taskName"
+                    type="text"
+                    name="task"
+                    placeholder="`${item.taskName}`"
+                >
+            </div>
+            <div class="taskType">
+                <form action="get">
+                    <span>任務分類：</span>
+                    <select id="type" v-model="item.taskType" name="type">
+                        <option value="">
+                            請選擇
+                        </option>
+                        <option value="work">
+                            工作
+                        </option>
+                        <option value="home">
+                            家事
+                        </option>
+                        <option value="friend">
+                            社交
+                        </option>
+                        <option value="other">
+                            其他
+                        </option>
+                    </select>
+                </form>
+            </div>
+            <div class="taskDate">
+                <span>完成日期：</span>
+                <date-picker v-model="item.expDate" placeholder="完成日期" value-type="format" class="datePicker">
+                    {{ `${item.expDate}` }}
+                </date-picker>
+            </div>
+            <div class="taskTag">
+                <label for="tag">任務備註：</label>
+                <input id="tag"
+                    v-model="item.taskTag"
+                    class="task"
+                    type="text"
+                    placeholder="`${item.taskTag}`"
+                >
+            </div>
+            <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
         </div>
+
         <div class="addtodoBtn">
-            <button @click="sendTodos">
-                送出
-            </button>
+            <div class="addBtn" @click="addTask">
+                新增一筆
+            </div>
+            <div class="saveBtn" @click="sendTodos">
+                儲存
+            </div>
         </div>
     </div>
 </template>
@@ -97,6 +147,7 @@ export default {
         ...mapMutations({}),
         addTask(){
             const taskid = uuidv4();
+
             if (this.inputTask === '') {
                 Swal.fire('請輸入任務名稱');
                 return;
@@ -117,6 +168,7 @@ export default {
                 isDone: false,
                 id: taskid,
                 taskTag: this.inputTag,
+                isEdit: false,
             };
             this.$store.commit('addTodo', data);
             this.inputTag = '';
@@ -129,7 +181,7 @@ export default {
         },
 
         sendTodos(){
-            if (this.todoArr.length < 1) {
+            if (this.$store.state.addtodos.length < 1) {
                 Swal.fire('請輸入任務');
                 return;
             }

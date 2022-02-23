@@ -38,4 +38,6 @@ export default {
         return allTags;
     },
 
+    selectTag: state => state.selectTag,
+
 };
