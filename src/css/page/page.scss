@@ -72,6 +72,22 @@
     padding: 1.5rem 1rem 0.5rem;
     margin: 1rem auto;
     width: 80%;
+    &.work {
+      background-color: bisque;
+      border: none;
+    }
+    &.home {
+      background-color: #63cdda;
+      border: none;
+    }
+    &.friend {
+      background-color: #9aecdb;
+      border: none;
+    }
+    &.other {
+      background-color: #ffcccc;
+      border: none;
+    }
     .task,
     .taskTag {
       margin-bottom: 1rem;
@@ -98,23 +114,6 @@
     }
   }
 
-  // .taskArea {
-  //   margin-top: 5vmin;
-  //   ul {
-  //     li {
-  //       margin-top: 2vmin;
-  //       display: flex;
-  //       align-items: center;
-  //       p {
-  //         // margin: auto 0px;
-  //         margin: 0 1rem;
-  //       }
-  //       i {
-  //         margin-right: 0.5rem;
-  //       }
-  //     }
-  //   }
-  // }
   .addtodoBtn {
     display: flex;
     width: 50%;
@@ -161,14 +160,6 @@
       }
     }
   }
-
-  // .taskTitle {
-  //   display: flex;
-  //   align-items: center;
-  //   h1 {
-  //     margin: auto 1rem;
-  //   }
-  // }
 
   .taskList {
     margin-top: 1rem;

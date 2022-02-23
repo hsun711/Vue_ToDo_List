@@ -22,7 +22,7 @@
                         <div class="itemTag">
                             <ul>
                                 <li v-for="(item, idx) in item.tag" :key="idx">
-                                    {{item}}
+                                    #{{item}}
                                 </li>
                             </ul>
                         </div>
@@ -140,7 +140,7 @@ export default {
             const { value: formValues } = await Swal.fire({
                 title: '輸入任務名稱及日期',
                 html:
-                    '<input id="swal-input1" class="swal2-input" placeholder="任務名稱">'+
+                    `<input id="swal-input1" class="swal2-input" placeholder="${item.taskName}">`+
                     '<input type="date" id="datepick" class="swal2-input">',
                 focusConfirm: false,
                 preConfirm: () => {
@@ -153,7 +153,7 @@ export default {
             const id = item.id;
             const data = {id, formValues}
             this.$store.commit('editTask', data);
-            item.isEdit = !item.isEdit;
+            item.isEdit = false;
         },
 
         removeTask(id){

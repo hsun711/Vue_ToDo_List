@@ -49,7 +49,15 @@
                 >
             </div>
         </div>
-        <div v-for="(item,index) in todoArr" :key="item.id" class="addTask">
+        <div class="addtodoBtn">
+            <div class="addBtn" @click="addTask">
+                新增一筆
+            </div>
+            <div class="saveBtn" @click="sendTodos">
+                儲存
+            </div>
+        </div>
+        <div v-for="(item,index) in todoArr" :key="item.id" class="addTask" :class="type[`${item.taskType}`]">
             <div class="task">
                 <label for="task">項目名稱：</label>
                 <input id="task"
@@ -83,7 +91,11 @@
             </div>
             <div class="taskDate">
                 <span>完成日期：</span>
-                <date-picker v-model="item.expDate" placeholder="完成日期" value-type="format" class="datePicker">
+                <date-picker v-model="item.expDate"
+                    placeholder="完成日期"
+                    value-type="format"
+                    class="datePicker"
+                >
                     {{ `${item.expDate}` }}
                 </date-picker>
             </div>
@@ -97,15 +109,6 @@
                 >
             </div>
             <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
-        </div>
-
-        <div class="addtodoBtn">
-            <div class="addBtn" @click="addTask">
-                新增一筆
-            </div>
-            <div class="saveBtn" @click="sendTodos">
-                儲存
-            </div>
         </div>
     </div>
 </template>
@@ -126,13 +129,16 @@ export default {
     props: {},
     data(){
         return {
-            titleName: '',
             inputTask: '',
             inputTag: '',
-            isChange: false,
-            changeTask: '',
             taskType: '',
             expDate: '',
+            type: {
+                work: 'work',
+                home: 'home',
+                friend: 'friend',
+                other: 'other',
+            },
         };
     },
     computed: {
