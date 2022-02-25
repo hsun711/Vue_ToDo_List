@@ -40,4 +40,7 @@ export default {
 
     selectTag: state => state.selectTag,
 
+    // changeTaskData(state){
+    // },
+
 };

@@ -12,7 +12,7 @@
                 </router-link>
             </li>
             <li :class="[this.$route.name === 'Add_page' ? 'active': '']">
-                <router-link class="nav-link" :to="{ name: 'Add_page'}">
+                <router-link class="nav-link" :to="{ name: 'Add_page', query:{ name:'Add'}}">
                     <i class="fa-solid fa-plus"></i>
                 </router-link>
             </li>

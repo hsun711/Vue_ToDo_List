@@ -33,13 +33,9 @@ export default {
 
     editTask(state, payload){
         const changeTodo = state.todos.filter(todo => todo.id === payload.id);
-        if (payload.formValues.date !== '') {
-            changeTodo[0].expDate = payload.formValues.date;
-        }
-        if (payload.formValues.task !== '') {
-            changeTodo[0].taskName = payload.formValues.task;
-        }
-        localStorage.set('todos', JSON.stringify(state.todos));
+        const notChangeTodo = state.todos.filter(todo => todo.id !== payload.id);
+        const tasks = [...notChangeTodo, ...changeTodo];
+        localStorage.set('todos', JSON.stringify(tasks));
     },
 
     chooseTag(state, tag){

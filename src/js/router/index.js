@@ -15,11 +15,6 @@ const routes = [
         name: 'Todo_page',
         component: () => import('components/Todo_page/main.vue'),
     },
-    // {
-    //     path: '/',
-    //     name: 'Done_page',
-    //     component: () => import('components/Todo_page/main.vue'),
-    // },
 ];
 
 const router = new VueRouter({

@@ -7,7 +7,7 @@
                     :key="item.tagName" 
                     :class="{'active': item.isActive}" 
                     @click="changeTag(item)">
-                    #{{ item.tagName }}
+                    {{ item.tagName }}
                 </li>
             </ul>
         </div>
@@ -16,13 +16,15 @@
             <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.taskName">
                 <div class="checked" :class="type[`${item.taskType}`]">
                     <div class="taskText">
-                        <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
-                            {{ item.taskName }}
-                        </h4>
+                        <div class="taskTitle">
+                            <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
+                                {{ item.taskName }}
+                            </h4>
+                        </div>
                         <div class="itemTag">
                             <ul>
-                                <li v-for="(item, idx) in item.tag" :key="idx">
-                                    #{{item}}
+                                <li v-for="(item, idx) in item.taskTag" :key="idx">
+                                    {{item}}
                                 </li>
                             </ul>
                         </div>
@@ -31,11 +33,12 @@
                         <p>{{ item.expDate }}</p>
                         <div class="editMenu">
                             <i class="fa-solid fa-ellipsis-vertical" @click="openMenu(item)"></i>
-                            <div :class="[item.isEdit ? 'active' : 'editBtn']">
-                                <i class="fa-solid fa-pen" @click="editTask(item)">編輯</i>
+                            <div :class="[item.id === itemid ? 'active' : 'editBtn']">
+                                <router-link :to="{ name: 'Add_page', query:{ name: item.id }}">
+                                    <i class="fa-solid fa-pen">編輯</i>
+                                </router-link>
                                 <i class="fa-solid fa-trash-can" @click="removeTask(item.id)">刪除</i>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -54,6 +57,7 @@ export default {
         return {
             isShow: true,
             isExp: false,
+            itemid:'',
             type: {
                 work: 'work',
                 home: 'home',
@@ -63,7 +67,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['itemsID', 'otherItemsID','getItemTag', 'itemsNotDone', 'itemsDone', 'selectTag','eachItemTag']),
+        ...mapGetters(['itemsID', 'otherItemsID','getItemTag', 'itemsNotDone', 'itemsDone', 'selectTag']),
         taskList(){
             let tasks = [];
             const typeName = !!this.$route.query.name ? this.$route.query.name: "";
@@ -80,31 +84,30 @@ export default {
             }
 
             const today = moment().format('YYYY-MM-DD');
-            tasks.map((task) => {
-                return task.isToday = task.expDate === today;
-            })
+            const newTask = tasks.map((task) => {
+                const taskList = JSON.parse(JSON.stringify(task));
+                const selectTag = JSON.parse(JSON.stringify(this.selectTag));
 
-            tasks.map((task) => {
-                const selectTag = this.selectTag;
+                taskList.isToday = taskList.expDate === today;
+                taskList.taskTag = taskList.taskTag.split(',');
+
                 if (selectTag.length === 0){
-                    return task.isTag = true;
-                } else {
-                    selectTag.map((item) => {
-                        let reg = new RegExp(item);
-                        if(task.taskTag.match(reg)){
-                            return task.isTag = true;
+                   taskList.isTag = true;
+                } 
+                else {
+                    selectTag.map((tag) => {
+                        if(taskList.taskTag.includes(tag)){
+                            taskList.isTag = true;
                         } else {
-                            return task.isTag = false;
+                            taskList.isTag = false;
                         }
+                        return taskList
                     })
                 }
+                return taskList;
             })
 
-            tasks.map((task) => {
-                const tags = task.taskTag.split(',');
-                return task.tag = tags;
-            })
-            return tasks;
+            return newTask;
         },
 
         formatItemTag(){
@@ -136,26 +139,6 @@ export default {
             localStorage.set('todos', JSON.stringify(newTaskArr));
         },
 
-        async editTask(item){ 
-            const { value: formValues } = await Swal.fire({
-                title: '輸入任務名稱及日期',
-                html:
-                    `<input id="swal-input1" class="swal2-input" placeholder="${item.taskName}">`+
-                    '<input type="date" id="datepick" class="swal2-input">',
-                focusConfirm: false,
-                preConfirm: () => {
-                    return {
-                        task: document.getElementById('swal-input1').value,
-                        date: document.getElementById('datepick').value
-                    }
-                }
-            })
-            const id = item.id;
-            const data = {id, formValues}
-            this.$store.commit('editTask', data);
-            item.isEdit = false;
-        },
-
         removeTask(id){
             const itemID = this.itemsID(id);
             this.$store.commit('removeTask', itemID)
@@ -167,7 +150,11 @@ export default {
         },
 
         openMenu(item){
-            item.isEdit = !item.isEdit;
+            if(this.itemid === ''){
+                this.itemid = item.id;
+            } else {
+                this.itemid = '';
+            }
         }
 
     },

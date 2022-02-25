@@ -154,7 +154,7 @@
         border: 2px solid rgb(173, 180, 202);
         margin-right: 0.75rem;
         padding: 0.1rem 0.5rem;
-        border-radius: 30% / 50%;
+        border-radius: 16px;
         list-style: none;
         cursor: pointer;
       }
@@ -190,18 +190,26 @@
         .taskText {
           display: flex;
           flex-direction: column;
-          .exp:before {
-            color: red;
-            font-size: 1.5rem;
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            content: "\f06d";
-          }
-          h4 {
-            margin: auto 0.5rem;
-            &:hover {
-              text-decoration: line-through;
-              cursor: pointer;
+          width: 30vmin;
+          .taskTitle {
+            width: 90%;
+            .exp:before {
+              color: red;
+              font-size: 1.5rem;
+              font-family: "Font Awesome 5 Free";
+              font-weight: 900;
+              content: "\f06d";
+            }
+            h4 {
+              margin: auto 0.5rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              &:hover {
+                text-decoration: line-through;
+                overflow: visible;
+                cursor: pointer;
+              }
             }
           }
           i {
