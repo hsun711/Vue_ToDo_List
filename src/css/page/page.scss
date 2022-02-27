@@ -150,13 +150,18 @@
     }
     ul {
       display: flex;
+      flex-wrap: wrap;
       li {
         border: 2px solid rgb(173, 180, 202);
         margin-right: 0.75rem;
+        margin-bottom: 0.25rem;
         padding: 0.1rem 0.5rem;
         border-radius: 16px;
         list-style: none;
         cursor: pointer;
+        .active {
+          color: gray;
+        }
       }
     }
   }
@@ -190,9 +195,8 @@
         .taskText {
           display: flex;
           flex-direction: column;
-          width: 30vmin;
           .taskTitle {
-            width: 90%;
+            width: 37vmin;
             .exp:before {
               color: red;
               font-size: 1.5rem;

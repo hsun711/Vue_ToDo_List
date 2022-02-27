@@ -23,7 +23,7 @@
                         </div>
                         <div class="itemTag">
                             <ul>
-                                <li v-for="(item, idx) in item.taskTag" :key="idx">
+                                <li v-for="(item, idx) in item.taskTag" :key="idx" :class="{'active': selectTag.includes(item)}">
                                     {{item}}
                                 </li>
                             </ul>
@@ -50,7 +50,6 @@
 import moment from 'moment';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import { localStorage } from 'lib/common/util';
-import Swal from 'sweetalert2';
 
 export default {
     data(){
@@ -121,6 +120,10 @@ export default {
             })
             return newTags;
         },
+
+        selectTag(){
+            return this.$store.state.selectTag;
+        }
         
     },
     mounted(){

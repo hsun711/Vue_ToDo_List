@@ -32,6 +32,7 @@ export default {
             const tags = todo.taskTag.split(',');
             return tags;
         });
+
         const newTag = tagArr.reduce((allTag, tag) => allTag.concat(tag), []);
         const allTags = newTag.filter((element, index, arr) => arr.indexOf(element) === index);
 
@@ -39,8 +40,5 @@ export default {
     },
 
     selectTag: state => state.selectTag,
-
-    // changeTaskData(state){
-    // },
 
 };
