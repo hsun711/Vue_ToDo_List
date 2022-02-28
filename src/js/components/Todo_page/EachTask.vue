@@ -11,39 +11,40 @@
                 </li>
             </ul>
         </div>
-
-        <ul class="taskList">
-            <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.taskName">
-                <div class="checked" :class="type[`${item.taskType}`]">
-                    <div class="taskText">
-                        <div class="taskTitle">
-                            <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
-                                {{ item.taskName }}
-                            </h4>
+        <div class="taskList">
+           <ul>
+                <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.taskName">
+                    <div class="checked" :class="type[`${item.taskType}`]">
+                        <div class="taskText">
+                            <div class="taskTitle">
+                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
+                                    {{ item.taskName }}
+                                </h4>
+                            </div>
+                            <div class="itemTag">
+                                <ul>
+                                    <li v-for="(item, idx) in item.taskTag" :key="idx" :class="{'active': selectTag.includes(item)}">
+                                        {{item}}
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="itemTag">
-                            <ul>
-                                <li v-for="(item, idx) in item.taskTag" :key="idx" :class="{'active': selectTag.includes(item)}">
-                                    {{item}}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="editArea">
-                        <p>{{ item.expDate }}</p>
-                        <div class="editMenu">
-                            <i class="fa-solid fa-ellipsis-vertical" @click="openMenu(item)"></i>
-                            <div :class="[item.id === itemid ? 'active' : 'editBtn']">
-                                <router-link :to="{ name: 'Add_page', query:{ name: item.id }}">
-                                    <i class="fa-solid fa-pen">編輯</i>
-                                </router-link>
-                                <i class="fa-solid fa-trash-can" @click="removeTask(item.id)">刪除</i>
+                        <div class="editArea">
+                            <p>{{ item.expDate }}</p>
+                            <div class="editMenu">
+                                <i class="fa-solid fa-ellipsis-vertical" @click="openMenu(item)"></i>
+                                <div :class="[item.id === itemid ? 'active' : 'editBtn']">
+                                    <router-link :to="{ name: 'Add_page', query:{ name: item.id }}">
+                                        <i class="fa-solid fa-pen"> 編輯</i>
+                                    </router-link>
+                                    <i class="fa-solid fa-trash-can" @click="removeTask(item.id)"> 刪除</i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul> 
+        </div>
     </div>
 </template>
 <script>

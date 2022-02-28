@@ -72,6 +72,12 @@
     padding: 1.5rem 1rem 0.5rem;
     margin: 1rem auto;
     width: 80%;
+    i {
+      align-self: flex-end;
+      &:hover {
+        cursor: pointer;
+      }
+    }
     &.work {
       background-color: bisque;
       border: none;
@@ -93,7 +99,7 @@
       margin-bottom: 1rem;
       input {
         width: 80%;
-        height: 5vmin;
+        height: 32px;
       }
     }
     .taskDate {
@@ -108,7 +114,7 @@
       form {
         select {
           width: 80%;
-          height: 5vmin;
+          height: 32px;
         }
       }
     }
@@ -116,8 +122,8 @@
 
   .addtodoBtn {
     display: flex;
-    width: 50%;
-    justify-content: space-between;
+    width: 70%;
+    justify-content: center;
     margin: auto;
     color: rgb(8, 27, 61);
     cursor: pointer;
@@ -133,6 +139,7 @@
       border: 2px solid rgb(200, 219, 253);
       padding: 0.5rem 1rem;
       border-radius: 8px;
+      margin-right: 3rem;
       &:hover {
         border: 2px solid rgb(114, 164, 250);
       }
@@ -149,6 +156,7 @@
       background-color: rgb(173, 180, 202);
     }
     ul {
+      padding: 0px;
       display: flex;
       flex-wrap: wrap;
       li {
@@ -167,92 +175,103 @@
   }
 
   .taskList {
-    margin-top: 1rem;
-    width: 85%;
-    li {
-      list-style: none;
-      .checked {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.5rem;
-        &.work {
-          background-color: bisque;
-          border-bottom: 2px solid rgb(255, 207, 148);
-        }
-        &.home {
-          background-color: #63cdda;
-          border-bottom: 2px solid #00b4cc;
-        }
-        &.friend {
-          background-color: #9aecdb;
-          border-bottom: 2px solid #04b692;
-        }
-        &.other {
-          background-color: #ffcccc;
-          border-bottom: 2px solid #ff7676;
-        }
-        .taskText {
+    margin: 1rem auto;
+    width: 90%;
+    ul {
+      padding: 0px;
+      li {
+        list-style: none;
+        .checked {
           display: flex;
-          flex-direction: column;
-          .taskTitle {
-            width: 37vmin;
-            .exp:before {
-              color: red;
-              font-size: 1.5rem;
-              font-family: "Font Awesome 5 Free";
-              font-weight: 900;
-              content: "\f06d";
-            }
-            h4 {
-              margin: auto 0.5rem;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              &:hover {
-                text-decoration: line-through;
-                overflow: visible;
-                cursor: pointer;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem;
+          &.work {
+            background-color: bisque;
+            border-bottom: 2px solid rgb(255, 207, 148);
+          }
+          &.home {
+            background-color: #63cdda;
+            border-bottom: 2px solid #00b4cc;
+          }
+          &.friend {
+            background-color: #9aecdb;
+            border-bottom: 2px solid #04b692;
+          }
+          &.other {
+            background-color: #ffcccc;
+            border-bottom: 2px solid #ff7676;
+          }
+          .taskText {
+            display: flex;
+            flex-direction: column;
+            .taskTitle {
+              width: 37vmin;
+              .exp:before {
+                color: red;
+                font-size: 1.5rem;
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                content: "\f06d";
+              }
+              h4 {
+                margin: auto 0.5rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                &:hover {
+                  text-decoration: line-through;
+                  overflow: visible;
+                  cursor: pointer;
+                }
               }
             }
-          }
-          i {
-            margin: auto 0;
-            cursor: pointer;
-          }
-        }
-        .editArea {
-          display: flex;
-          flex-direction: column;
-          p {
-            margin: auto 0.5rem;
-            color: gray;
-          }
-          .editMenu {
-            position: relative;
             i {
+              margin: auto 0;
               cursor: pointer;
-              margin-left: 5.5rem;
             }
-            .editBtn {
-              display: none;
+          }
+          .editArea {
+            display: flex;
+            flex-direction: column;
+            p {
+              margin: auto 0.5rem;
+              color: gray;
             }
-            .active {
-              z-index: 3;
-              border: 2px solid rgb(194, 190, 190);
-              background-color: rgb(243, 243, 243);
-              position: absolute;
-              top: 23px;
-              left: 35px;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              padding: 0.25rem 0rem;
-              margin: auto;
+            .editMenu {
+              position: relative;
               i {
                 cursor: pointer;
+                margin-left: 5.5rem;
+              }
+              .editBtn {
+                display: none;
+              }
+              .active {
+                z-index: 3;
+                width: 10vmin;
+                border: 2px solid rgb(194, 190, 190);
+                background-color: rgb(243, 243, 243);
+                position: absolute;
+                top: 23px;
+                left: 35px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0.25rem 0rem;
                 margin: auto;
-                padding: 0.25rem 0.5rem;
+                i {
+                  cursor: pointer;
+                  margin: auto;
+                  padding: 0.25rem 0.5rem;
+                  color: black;
+                  &:hover {
+                    color: rgb(69, 69, 148);
+                  }
+                }
+                .fa-trash-can {
+                  border-top: 2px solid rgb(194, 190, 190);
+                }
               }
             }
           }

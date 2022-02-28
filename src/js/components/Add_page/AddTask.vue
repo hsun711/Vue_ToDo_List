@@ -99,7 +99,6 @@ export default {
             let tasks = [];
             const typeName = !!this.$route.query.name ? this.$route.query.name: "";
             if(typeName === 'Add'){
-                // console.log('Add');
                 tasks = this.addTodoList;
             }else{
                 const editTask = this.itemsID(this.$route.query.name);
