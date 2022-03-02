@@ -40,5 +40,5 @@ export default {
     },
 
     selectTag: state => state.selectTag,
-
+    todos: state => state.todos,
 };

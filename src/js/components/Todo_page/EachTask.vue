@@ -1,11 +1,12 @@
 <template>
     <div id="eachTask">
-        <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"代辦項目" }} :</h1>
+        <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} :</h1>
         <div class="itemTag">
             <ul>
                 <li v-for="item in formatItemTag" 
                     :key="item.tagName" 
-                    :class="{'active': item.isActive}" 
+                    :class="{'active': item.isActive}"
+                    class="tagArr"
                     @click="changeTag(item)">
                     {{ item.tagName }}
                 </li>
@@ -17,8 +18,11 @@
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">
-                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
+                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}" v-if="item.time > now">
                                     {{ item.taskName }}
+                                </h4>
+                                <h4 @click="turnDone(item.id)" v-if="item.time < now" style="color: red">
+                                    {{ item.taskName }} 已經過期了！！
                                 </h4>
                             </div>
                             <div class="itemTag">
@@ -32,12 +36,16 @@
                         <div class="editArea">
                             <p>{{ item.expDate }}</p>
                             <div class="editMenu">
-                                <i class="fa-solid fa-ellipsis-vertical" @click="openMenu(item)"></i>
-                                <div :class="[item.id === itemid ? 'active' : 'editBtn']">
-                                    <router-link :to="{ name: 'Add_page', query:{ name: item.id }}">
-                                        <i class="fa-solid fa-pen"> 編輯</i>
+                                <div class="dotMenu" @click="openMenu(item)">
+                                    <i class="icon fa-solid fa-ellipsis-vertical"></i>
+                                </div>
+                                <div :class="[item.id === itemid ? 'active' : 'editBtn']">                                    
+                                    <router-link class="active-item" :to="{ name: 'Add_page', query:{ name: item.id }}">
+                                        <i class="fa-solid fa-pen"></i> 編輯
                                     </router-link>
-                                    <i class="fa-solid fa-trash-can" @click="removeTask(item.id)"> 刪除</i>
+                                    <div class="active-item" @click="removeTask(item.id)">
+                                        <i class="fa-solid fa-trash-can"></i> 刪除
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -51,6 +59,7 @@
 import moment from 'moment';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import { localStorage } from 'lib/common/util';
+import Swal from 'sweetalert2';
 
 export default {
     data(){
@@ -58,6 +67,7 @@ export default {
             isShow: true,
             isExp: false,
             itemid:'',
+            now: moment().valueOf(),
             type: {
                 work: 'work',
                 home: 'home',
@@ -87,9 +97,11 @@ export default {
             const newTask = tasks.map((task) => {
                 const taskList = JSON.parse(JSON.stringify(task));
                 const selectTag = JSON.parse(JSON.stringify(this.selectTag));
+                const time = new Date(taskList.expDate).getTime();
 
                 taskList.isToday = taskList.expDate === today;
                 taskList.taskTag = taskList.taskTag.split(',');
+                taskList.time = time;
 
                 if (selectTag.length === 0){
                    taskList.isTag = true;
@@ -104,9 +116,12 @@ export default {
                         return taskList
                     })
                 }
+                
                 return taskList;
             })
-
+            newTask.sort((a,b) => {
+                return a.time - b.time;
+            })
             return newTask;
         },
 
@@ -132,13 +147,18 @@ export default {
     },
     methods: {
         ...mapActions({
-            getTodoList: 'getTodoList', 
+            getTodoList: 'getTodoList',
         }),
         ...mapMutations({}),
         
         turnDone(id){
             const itemid = this.itemsID(id);
-            itemid[0].isDone = true;
+            itemid[0].isDone = !itemid[0].isDone;
+            if(itemid[0].isDone === true){
+                Swal.fire('移至完成項目頁面');
+            }else{
+                Swal.fire('移至待辦項目頁面');
+            }
             const newTaskArr = [...this.otherItemsID(id), ...itemid];
             localStorage.set('todos', JSON.stringify(newTaskArr));
         },

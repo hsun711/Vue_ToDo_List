@@ -7,7 +7,10 @@ export default {
     },
 
     getTodoList({ commit }){
-        const tasks = JSON.parse(localStorage.get('todos'));
-        commit('setTodoList', tasks);
+        return  new Promise((resolve, reject) => {
+            const tasks = JSON.parse(localStorage.get('todos'));
+            commit('setTodoList', tasks);
+            resolve();
+        });
     },
 };

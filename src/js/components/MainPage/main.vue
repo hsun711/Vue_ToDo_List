@@ -2,7 +2,7 @@
     <div>
         <Header />
         <div id="routerPage">
-            <router-view></router-view>
+            <router-view v-if="!init"></router-view>
         </div>
     </div>
 </template>
@@ -22,6 +22,7 @@ export default {
     props: {},
     data(){
         return {
+            init: true,
         };
     },
     computed: {
@@ -39,22 +40,21 @@ export default {
         // this.init();
         if (!localStorage.get('todos')) {
             localStorage.set('todos', JSON.stringify([]));
+            this.init = false;
+        } else {
+            this.getTodoList().then(() => {
+                this.init = false;
+            });
         }
     },
     updated(){},
     destroyed(){},
     methods: {
-        ...mapActions({}),
+        ...mapActions({
+            getTodoList: 'getTodoList',
+        }),
         ...mapMutations({
         }),
-        init(){
-            // const params = {};
-            // this.$store.dispatch('getTodoLiast', params).then((response) => {
-            //     console.log(response);
-            // }, () => {
-
-            // });
-        },
     },
 };
 </script>

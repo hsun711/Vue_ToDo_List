@@ -1,7 +1,10 @@
 <template>
     <div id="addPage">
         <h1>{{ this.$route.query.name === 'Add' ? "新增項目":"修改項目" }}：</h1>
-        <div v-for="(item,index) in addList" :key="item.id" class="addTask" :class="type[`${item.taskType}`]">
+        <div v-for="(item,index) in addTodoList" :key="index" class="addTask" :class="type[`${item.taskType}`]">
+            <div class="taskState" v-if="route">
+                <h6 :class="[item.isDone === true ? 'ok':'notyet']">項目狀態：{{ item.isDone === true ? '已完成' : '未完成' }}</h6>
+            </div>
             <div class="task">
                 <label for="task">項目名稱：</label>
                 <input id="task"
@@ -50,7 +53,9 @@
                     type="text"
                 >
             </div>
-            <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
+            <div class="trashCan">
+                <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
+            </div>
         </div>
         <div class="addtodoBtn">
             <div class="addBtn" @click="addTask" v-if="this.$route.query.name === 'Add'">
@@ -65,10 +70,8 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import { localStorage } from 'lib/common/util';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
-import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 
 export default {
@@ -83,6 +86,7 @@ export default {
             inputTag: '',
             taskType: '',
             expDate: '',
+            route: false,
             type: {
                 work: 'work',
                 home: 'home',
@@ -94,72 +98,59 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['itemsID']),
-        addList(){
-            let tasks = [];
-            const typeName = !!this.$route.query.name ? this.$route.query.name: "";
-            if(typeName === 'Add'){
-                tasks = this.addTodoList;
-            }else{
-                const editTask = this.itemsID(this.$route.query.name);
-                tasks = editTask;
-            }
-
-            return tasks;
-        }
+        ...mapGetters(['itemsID','todos']),
     },
     mounted(){
-        if(this.addTodoList.length === 0){
+        const typeName = this.$route.query.name;
+        if (typeName !== 'Add') {
+            this.route = true;
+            const todos = JSON.parse(JSON.stringify(this.todos));
+            const editTask = todos.filter((todo) => {
+                return todo.id === this.$route.query.name;
+            })    
+            this.addTodoList = editTask;         
+        } else{
             this.addTask();
         }
     },
     methods: {
         ...mapActions({}),
-        ...mapMutations({}),
+        ...mapMutations({
+            editTask: 'editTask',
+        }),
         addTask(){
-            const taskid = uuidv4();
             const data = {
                 taskName: this.inputTask,
                 taskType: this.taskType,
                 expDate: this.expDate,
                 isDone: false,
-                id: taskid,
+                id: '',
                 taskTag: this.inputTag,
             };
             
             this.addTodoList.push(data);
         },
         removeTask(index){
-            this.addTodoList.splice(index, 1);
+            const typeName = this.$route.query.name;
+            if(typeName === 'Add'){
+                this.addTodoList.splice(index, 1);
+            }else{
+                const editTask = this.itemsID(typeName);
+                this.$store.commit('removeTask', editTask);
+                history.go(-1);
+            }
         },
 
         sendTodos(){
-            if (this.addTodoList.taskName === '') {
-                Swal.fire('請輸入任務名稱');
-                return;
-            }
-            if (this.addTodoList.taskType === '') {
-                Swal.fire('請選擇任務分類');
-                return;
-            }
-            if (this.addTodoList.expDate === '') {
-                Swal.fire('請選擇到期日');
-                return;
-            }
+            const typeName = this.$route.query.name;
+            this.$store.commit('editTask', [ ...this.addTodoList,]);
             
-            const typeName = !!this.$route.query.name ? this.$route.query.name: "";
             if(typeName === 'Add'){
-                const oldTodos = JSON.parse(localStorage.get('todos'));
-                oldTodos.push(...this.addTodoList);
-                localStorage.set('todos', JSON.stringify(oldTodos));
                 Swal.fire('已送出任務清單，可到 Todo page 查看');
                 this.addTodoList = [];
-            }else{
-                const id = this.$route.query.name;
-                const formValues = this.addList;
-                const data = {id, formValues}
-                this.$store.commit('editTask', data);
+            } else {
                 Swal.fire('修改完成');
+                history.go(-1);
             }
         },
     },

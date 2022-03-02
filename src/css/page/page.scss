@@ -22,13 +22,16 @@
 
 #headernav {
   width: 80%;
-  height: 100%;
+  height: 40px;
   display: flex;
   margin: 10vmin auto 0vmin;
+  user-select: none;
   ul {
     display: flex;
     align-items: center;
-    margin-bottom: 0rem;
+    margin: 0rem;
+    padding: 0px;
+    padding-left: 32px;
     li {
       list-style-type: none;
       border: 2px solid rgb(173, 180, 202);
@@ -41,10 +44,23 @@
       }
     }
     .active {
-      height: 110%;
-      z-index: 5;
+      height: 45px;
       background-color: white;
     }
+  }
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+  @media (max-width: 576px) {
+    ul {
+      padding-left: 20px;
+      li {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  @media (max-width: 300px) {
+    width: 100%;
   }
 }
 
@@ -56,6 +72,14 @@
   border: 2px solid rgb(173, 180, 202);
   border-radius: 8px;
   padding: 1.5rem;
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 0.75rem;
+  }
+  @media (max-width: 300px) {
+    width: 100%;
+    padding: 0.5rem;
+  }
 }
 
 /////////////// Add page ///////////////
@@ -72,18 +96,42 @@
     padding: 1.5rem 1rem 0.5rem;
     margin: 1rem auto;
     width: 80%;
-    i {
+    .taskState {
+      margin-bottom: 1rem;
+      .ok {
+        color: rgb(6, 122, 64);
+        &:after {
+          color: rgb(6, 122, 64);
+          margin-left: 0.5rem;
+          font-size: 1.5rem;
+          font-family: "Font Awesome 5 Free";
+          content: "\f58b";
+        }
+      }
+      .notyet {
+        color: red;
+        &:after {
+          color: red;
+          margin-left: 0.5rem;
+          font-size: 1.5rem;
+          font-family: "Font Awesome 5 Free";
+          content: "\f556";
+        }
+      }
+    }
+    .trashCan {
       align-self: flex-end;
       &:hover {
         cursor: pointer;
       }
     }
+
     &.work {
       background-color: bisque;
       border: none;
     }
     &.home {
-      background-color: #63cdda;
+      background-color: #7ebef3;
       border: none;
     }
     &.friend {
@@ -100,6 +148,9 @@
       input {
         width: 80%;
         height: 32px;
+        border: 1px solid rgb(207, 207, 207);
+        border-radius: 3px;
+        padding-left: 8px;
       }
     }
     .taskDate {
@@ -115,6 +166,9 @@
         select {
           width: 80%;
           height: 32px;
+          border: 1px solid rgb(207, 207, 207);
+          border-radius: 3px;
+          padding-left: 4px;
         }
       }
     }
@@ -126,11 +180,12 @@
     justify-content: center;
     margin: auto;
     color: rgb(8, 27, 61);
-    cursor: pointer;
+    user-select: none;
     .saveBtn {
       background-color: rgb(200, 219, 253);
       padding: 0.5rem 1rem;
       border-radius: 8px;
+      cursor: pointer;
       &:hover {
         background-color: rgb(114, 164, 250);
       }
@@ -140,8 +195,42 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       margin-right: 3rem;
+      cursor: pointer;
       &:hover {
         border: 2px solid rgb(114, 164, 250);
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    padding: 0.5rem;
+    .addTask {
+      width: 100%;
+      padding: 1rem;
+      .task,
+      .taskTag {
+        input {
+          width: 100%;
+        }
+      }
+      .taskDate {
+        .datePicker {
+          width: 100%;
+        }
+      }
+      .taskType {
+        form {
+          select {
+            width: 100%;
+          }
+        }
+      }
+    }
+    .addtodoBtn {
+      .saveBtn,
+      .addBtn {
+        font-size: 10px;
+        padding: 0.5rem;
       }
     }
   }
@@ -151,25 +240,27 @@
 #eachTask {
   .itemTag {
     color: gray;
+    user-select: none;
     .active {
       color: white;
       background-color: rgb(173, 180, 202);
+      border: 2px solid rgb(91, 95, 109);
     }
     ul {
       padding: 0px;
       display: flex;
       flex-wrap: wrap;
+      .tagArr {
+        cursor: pointer;
+      }
       li {
+        background-color: rgb(255, 254, 254);
         border: 2px solid rgb(173, 180, 202);
         margin-right: 0.75rem;
         margin-bottom: 0.25rem;
         padding: 0.1rem 0.5rem;
         border-radius: 16px;
         list-style: none;
-        cursor: pointer;
-        .active {
-          color: gray;
-        }
       }
     }
   }
@@ -183,30 +274,32 @@
         list-style: none;
         .checked {
           display: flex;
+          width: 100%;
           justify-content: space-between;
           align-items: center;
           padding: 0.5rem;
           &.work {
             background-color: bisque;
-            border-bottom: 2px solid rgb(255, 207, 148);
+            border-bottom: 2px solid rgb(223, 129, 15);
           }
           &.home {
-            background-color: #63cdda;
-            border-bottom: 2px solid #00b4cc;
+            background-color: #7ebef3;
+            border-bottom: 2px solid #307dbb;
           }
           &.friend {
             background-color: #9aecdb;
-            border-bottom: 2px solid #04b692;
+            border-bottom: 2px solid #028168;
           }
           &.other {
             background-color: #ffcccc;
-            border-bottom: 2px solid #ff7676;
+            border-bottom: 2px solid #ec3f3f;
           }
           .taskText {
             display: flex;
             flex-direction: column;
+            width: 70%;
             .taskTitle {
-              width: 37vmin;
+              margin-bottom: 0.75rem;
               .exp:before {
                 color: red;
                 font-size: 1.5rem;
@@ -215,64 +308,104 @@
                 content: "\f06d";
               }
               h4 {
-                margin: auto 0.5rem;
+                margin: auto;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                cursor: pointer;
                 &:hover {
                   text-decoration: line-through;
-                  overflow: visible;
-                  cursor: pointer;
+                  overflow: initial;
+                  word-break: break-all;
+                  white-space: initial;
                 }
               }
             }
-            i {
-              margin: auto 0;
-              cursor: pointer;
-            }
           }
           .editArea {
+            width: 30%;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
             p {
               margin: auto 0.5rem;
-              color: gray;
+              color: rgb(58, 57, 57);
             }
             .editMenu {
+              user-select: none;
               position: relative;
-              i {
-                cursor: pointer;
+              .dotMenu {
+                width: 20px;
+                height: 100%;
                 margin-left: 5.5rem;
+                cursor: pointer;
+                .icon {
+                  padding: 0.5rem;
+                }
               }
               .editBtn {
                 display: none;
               }
               .active {
                 z-index: 3;
-                width: 10vmin;
-                border: 2px solid rgb(194, 190, 190);
+                width: 80px;
                 background-color: rgb(243, 243, 243);
                 position: absolute;
-                top: 23px;
+                top: 30px;
                 left: 35px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 0.25rem 0rem;
-                margin: auto;
-                i {
-                  cursor: pointer;
-                  margin: auto;
-                  padding: 0.25rem 0.5rem;
+                box-shadow: 0px 0px 5px gray;
+                border-radius: 4px;
+                overflow: hidden;
+                a {
+                  display: block;
+                  text-decoration: none;
                   color: black;
+                }
+                .active-item {
+                  cursor: pointer;
+                  padding: 0.25rem 0.75rem;
+                  color: black;
+                  margin: 0px !important;
+
                   &:hover {
                     color: rgb(69, 69, 148);
+                    background-color: rgb(203, 203, 203);
                   }
                 }
-                .fa-trash-can {
-                  border-top: 2px solid rgb(194, 190, 190);
-                }
               }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .itemTag {
+      ul {
+        li {
+          font-size: 8px;
+          margin-right: 0.25rem;
+        }
+      }
+    }
+    .taskList {
+      width: 100%;
+      ul {
+        li {
+          .checked {
+            flex-direction: column;
+            align-items: flex-start;
+            .editArea {
+              flex-direction: row;
+              width: 100%;
+              justify-content: space-between;
+              p {
+                font-size: 8px;
+              }
+            }
+            .taskText {
+              width: 100%;
             }
           }
         }
