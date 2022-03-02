@@ -3,9 +3,6 @@ import { localStorage } from 'lib/common/util';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
-    initSystem(state, params){
-        // state.prizeList = prizeList;
-    },
     SetPageSetting(state, params){
         for (const key in params) {
             state[`PageSetting_${key}`] = params[key];
@@ -34,10 +31,9 @@ export default {
 
     editTask(state, payload){
         const task = [];
-
         const todos = JSON.parse(JSON.stringify(state.todos));
-
         const todoObj = {};
+
         todos.forEach((item) => {
             todoObj[item.id] = item;
         });
@@ -62,20 +58,6 @@ export default {
         const data = editTask.concat(newTodo);
         localStorage.set('todos', JSON.stringify(data));
         state.todos = todos;
-
-        // const editTask = oldTodo.concat(edit);
-        // if (newTodo.length === 0) {
-        //     data = editTask;
-        // } else if (editTask.length === 0) {
-        //     data = [...todos, ...newTodo];
-        // } else {
-        //     data = [...todos, ...editTask];
-        // }
-
-        // const changeTodo = state.todos.filter(todo => todo.id === payload.id);
-        // const notChangeTodo = state.todos.filter(todo => todo.id !== payload.id);
-        // const tasks = [...notChangeTodo, ...changeTodo];
-        // localStorage.set('todos', JSON.stringify(tasks));
     },
 
     chooseTag(state, tag){

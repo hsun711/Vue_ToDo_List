@@ -21,8 +21,8 @@
                                 <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
                                     {{ item.taskName }}
                                 </h4>
-                                <h6 v-if="item.time < now && item.isDone === false" style="color: red">
-                                    已經過期了啦～
+                                <h6 v-if="item.time < now - 86400000 && item.isDone === false" style="color: red">
+                                    已經過期囉～
                                 </h6>
                             </div>
                             <div class="itemTag">
@@ -165,7 +165,26 @@ export default {
 
         removeTask(id){
             const itemID = this.itemsID(id);
-            this.$store.commit('removeTask', itemID)
+            Swal.fire({
+                title: '確定要刪除嗎?',
+                text: "刪掉就回不來了喔!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                    '已刪除!',
+                    '資料已經回不來了',
+                    'success'
+                    )
+                    this.$store.commit('removeTask', itemID);
+                } else {
+                    this.itemid = '';
+                }
+            })
         },
 
         changeTag(item){

@@ -7,7 +7,7 @@ export default {
     },
 
     getTodoList({ commit }){
-        return  new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const tasks = JSON.parse(localStorage.get('todos'));
             commit('setTodoList', tasks);
             resolve();
