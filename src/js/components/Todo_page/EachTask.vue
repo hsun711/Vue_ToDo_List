@@ -18,12 +18,12 @@
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">
-                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}" v-if="item.time > now">
+                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
                                     {{ item.taskName }}
                                 </h4>
-                                <h4 @click="turnDone(item.id)" v-if="item.time < now" style="color: red">
-                                    {{ item.taskName }} 已經過期了！！
-                                </h4>
+                                <h6 v-if="item.time < now && item.isDone === false" style="color: red">
+                                    已經過期了啦～
+                                </h6>
                             </div>
                             <div class="itemTag">
                                 <ul>
