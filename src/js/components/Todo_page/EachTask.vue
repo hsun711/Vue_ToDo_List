@@ -14,7 +14,7 @@
         </div>
         <div class="taskList">
            <ul>
-                <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.taskName">
+                <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.id">
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">

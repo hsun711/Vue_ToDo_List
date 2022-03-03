@@ -143,20 +143,64 @@ export default {
 
         sendTodos(){
             const typeName = this.$route.query.name;
-            this.$store.commit('editTask', [ ...this.addTodoList,]);
-            if(typeName === 'Add'){
-                Swal.fire('已送出，可到 Todo page 查看');
-                this.addTodoList = [];
-            } else {
-                Swal.fire({
-                    position: 'center-center',
-                    icon: 'success',
-                    title: '修改完成',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                history.go(-1);
+
+            const checkTask = this.addTodoList.every((todo) => {
+
+                if(todo.taskName === ''){
+                    Swal.fire('請輸入任務名稱');
+                    return;
+                }
+                if(todo.taskType === ''){
+                    Swal.fire('請選擇任務分類');
+                    return;
+                }
+                if(todo.expDate === ''){
+                    Swal.fire('請選擇完成日期');
+                    return;
+                }
+                if(todo.taskTag === ''){
+                    Swal.fire('請輸入任務備註');
+                    return;
+                } else {
+                    return todo;
+                }
+            })
+            console.log(checkTask);
+            
+            if(checkTask === true){
+                this.$store.commit('editTask', [ ...this.addTodoList,]);
+                if(typeName === 'Add'){
+                    Swal.fire('已送出，可到 Todo page 查看');
+                    this.addTodoList = [];
+                } else {
+                    Swal.fire({
+                        position: 'center-center',
+                        icon: 'success',
+                        title: '修改完成',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    history.go(-1);
+                }
             }
+
+
+
+
+            // this.$store.commit('editTask', [ ...this.addTodoList,]);
+            // if(typeName === 'Add'){
+            //     Swal.fire('已送出，可到 Todo page 查看');
+            //     this.addTodoList = [];
+            // } else {
+            //     Swal.fire({
+            //         position: 'center-center',
+            //         icon: 'success',
+            //         title: '修改完成',
+            //         showConfirmButton: false,
+            //         timer: 1500
+            //     })
+            //     history.go(-1);
+            // }
         },
     },
 };
