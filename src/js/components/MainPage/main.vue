@@ -33,11 +33,8 @@ export default {
             return this.$route;
         },
     },
-    watch: {
-    },
     created(){},
     mounted(){
-        // this.init();
         if (!localStorage.get('todos')) {
             localStorage.set('todos', JSON.stringify([]));
             this.init = false;

@@ -27,7 +27,8 @@ export default {
     filters: {},
     props: {},
     data(){
-        return {};
+        return {
+        };
     },
     computed: {
         ...mapGetters([
@@ -35,7 +36,8 @@ export default {
     },
     watch: {
     },
-    mounted(){},
+    mounted(){
+    },
     methods: {
         ...mapActions({}),
         ...mapMutations({}),

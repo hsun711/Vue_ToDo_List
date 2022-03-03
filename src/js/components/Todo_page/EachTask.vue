@@ -22,7 +22,7 @@
                                     {{ item.taskName }}
                                 </h4>
                                 <h6 v-if="item.time < now - 86400000 && item.isDone === false" style="color: red">
-                                    已經過期囉～
+                                    做完了沒～已經過期囉！
                                 </h6>
                             </div>
                             <div class="itemTag">
@@ -37,7 +37,7 @@
                             <p>{{ item.expDate }}</p>
                             <div class="editMenu">
                                 <div class="dotMenu" @click="openMenu(item)">
-                                    <i class="icon fa-solid fa-ellipsis-vertical"></i>
+                                    <i class="icon fa-solid fa-ellipsis-vertical fa-xl"></i>
                                 </div>
                                 <div :class="[item.id === itemid ? 'active' : 'editBtn']">                                    
                                     <router-link class="active-item" :to="{ name: 'Add_page', query:{ name: item.id }}">
@@ -110,18 +110,18 @@ export default {
                     selectTag.map((tag) => {
                         if(taskList.taskTag.includes(tag)){
                             taskList.isTag = true;
-                        } else {
-                            taskList.isTag = false;
                         }
                         return taskList
                     })
                 }
                 
                 return taskList;
-            })
+            });
+
             newTask.sort((a,b) => {
                 return a.time - b.time;
-            })
+            });
+
             return newTask;
         },
 

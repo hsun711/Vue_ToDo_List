@@ -1,6 +1,6 @@
 <template>
     <div id="addPage">
-        <h1>{{ this.$route.query.name === 'Add' ? "新增項目":"修改項目" }}：</h1>
+        <h1>{{ this.typeName === 'Add' ? "新增項目":"修改項目" }}：</h1>
         <div v-for="(item,index) in addTodoList" :key="index" class="addTask" :class="type[`${item.taskType}`]">
             <div class="taskState" v-if="route">
                 <h6 :class="[item.isDone === true ? 'ok':'notyet']">項目狀態：{{ item.isDone === true ? '已完成' : '未完成' }}</h6>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="addtodoBtn">
-            <div class="addBtn" @click="addTask" v-if="this.$route.query.name === 'Add'">
+            <div class="addBtn" @click="addTask" v-if="this.typeName === 'Add'">
                 新增一筆
             </div>
             <div class="saveBtn" @click="sendTodos">
@@ -86,6 +86,7 @@ export default {
             inputTag: '',
             taskType: '',
             expDate: '',
+            typeName: this.$route.query.name,
             route: false,
             type: {
                 work: 'work',
@@ -97,12 +98,12 @@ export default {
             addTodoList: [],
         };
     },
+    watch:{},
     computed: {
         ...mapGetters(['itemsID','todos']),
     },
     mounted(){
-        const typeName = this.$route.query.name;
-        if (typeName !== 'Add') {
+        if (this.typeName !== 'Add') {
             this.route = true;
             const todos = JSON.parse(JSON.stringify(this.todos));
             const editTask = todos.filter((todo) => {
@@ -118,6 +119,7 @@ export default {
         ...mapMutations({
             editTask: 'editTask',
         }),
+
         addTask(){
             const data = {
                 taskName: this.inputTask,
@@ -131,19 +133,16 @@ export default {
             this.addTodoList.push(data);
         },
         removeTask(index){
-            const typeName = this.$route.query.name;
-            if(typeName === 'Add'){
+            if(this.typeName === 'Add'){
                 this.addTodoList.splice(index, 1);
             }else{
-                const editTask = this.itemsID(typeName);
+                const editTask = this.itemsID(this.typeName);
                 this.$store.commit('removeTask', editTask);
                 history.go(-1);
             }
         },
 
         sendTodos(){
-            const typeName = this.$route.query.name;
-
             const checkTask = this.addTodoList.every((todo) => {
                 if(todo.taskName === ''){
                     Swal.fire('請輸入任務名稱');
@@ -167,7 +166,7 @@ export default {
 
             if(checkTask === true){
                 this.$store.commit('editTask', [ ...this.addTodoList,]);
-                if(typeName === 'Add'){
+                if(this.typeName === 'Add'){
                     Swal.fire('已送出，可到 Todo page 查看');
                     this.addTodoList = [];
                 } else {
