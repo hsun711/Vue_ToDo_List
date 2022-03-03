@@ -145,7 +145,6 @@ export default {
             const typeName = this.$route.query.name;
 
             const checkTask = this.addTodoList.every((todo) => {
-
                 if(todo.taskName === ''){
                     Swal.fire('請輸入任務名稱');
                     return;
@@ -165,8 +164,7 @@ export default {
                     return todo;
                 }
             })
-            console.log(checkTask);
-            
+
             if(checkTask === true){
                 this.$store.commit('editTask', [ ...this.addTodoList,]);
                 if(typeName === 'Add'){
@@ -183,24 +181,6 @@ export default {
                     history.go(-1);
                 }
             }
-
-
-
-
-            // this.$store.commit('editTask', [ ...this.addTodoList,]);
-            // if(typeName === 'Add'){
-            //     Swal.fire('已送出，可到 Todo page 查看');
-            //     this.addTodoList = [];
-            // } else {
-            //     Swal.fire({
-            //         position: 'center-center',
-            //         icon: 'success',
-            //         title: '修改完成',
-            //         showConfirmButton: false,
-            //         timer: 1500
-            //     })
-            //     history.go(-1);
-            // }
         },
     },
 };
