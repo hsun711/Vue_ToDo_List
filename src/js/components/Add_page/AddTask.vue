@@ -147,7 +147,14 @@ export default {
             this.addTodoList.push(data);
         },
         removeTask(index){
-            if(this.typeName === 'Add'){
+            if(this.typeName !== 'Add' && this.typeName === 'editAll'){
+                const editTodoList = JSON.parse(JSON.stringify(this.editTodoList));
+                const taskId = editTodoList[index]
+                this.addTodoList.splice(index,1)
+                const editTask = this.itemsID(taskId);
+                this.$store.commit('removeTask', editTask);
+            }
+            else if(this.typeName === 'Add'){
                 this.addTodoList.splice(index, 1);
             } else{
                 const editTask = this.itemsID(this.typeName);
