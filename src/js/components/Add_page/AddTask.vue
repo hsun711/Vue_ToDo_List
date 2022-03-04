@@ -54,7 +54,7 @@
                 >
             </div>
             <div class="trashCan">
-                <i class="fa-solid fa-trash-can" @click="removeTask(index)"></i>
+                <i class="fa-solid fa-trash-can fa-lg" @click="removeTask(index)"></i>
             </div>
         </div>
         <div class="addtodoBtn">
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters, mapState } from 'vuex';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import Swal from 'sweetalert2';
@@ -100,10 +100,24 @@ export default {
     },
     watch:{},
     computed: {
-        ...mapGetters(['itemsID','todos']),
+        ...mapGetters(['itemsID','todos','itemsNotDone']),
+        ...mapState(['editTodoList']),
     },
     mounted(){
-        if (this.typeName !== 'Add') {
+        if(this.typeName !== 'Add' && this.typeName === 'editAll'){
+            const todos = JSON.parse(JSON.stringify(this.itemsNotDone));
+            const editTodoList = JSON.parse(JSON.stringify(this.editTodoList));
+            const arr = [];
+
+            todos.forEach((todo) => {
+               if(editTodoList.includes(todo.id)){
+                   arr.push(todo);
+               }
+            });
+
+            this.addTodoList = arr;
+        }
+        else if (this.typeName !== 'Add') {
             this.route = true;
             const todos = JSON.parse(JSON.stringify(this.todos));
             const editTask = todos.filter((todo) => {
@@ -135,7 +149,7 @@ export default {
         removeTask(index){
             if(this.typeName === 'Add'){
                 this.addTodoList.splice(index, 1);
-            }else{
+            } else{
                 const editTask = this.itemsID(this.typeName);
                 this.$store.commit('removeTask', editTask);
                 history.go(-1);

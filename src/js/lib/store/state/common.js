@@ -5,4 +5,5 @@ export default {
     addTodoList: [],
     todos: [],
     selectTag: [],
+    editTodoList: [],
 };

@@ -89,8 +89,6 @@
   display: flex;
   flex-direction: column;
   .addTask {
-    display: flex;
-    flex-direction: column;
     border: 2px solid rgb(200, 219, 253);
     background-color: rgb(219, 230, 248);
     padding: 1.5rem 1rem 0.5rem;
@@ -120,7 +118,7 @@
       }
     }
     .trashCan {
-      align-self: flex-end;
+      text-align: right;
       &:hover {
         cursor: pointer;
       }
@@ -238,6 +236,49 @@
 
 /////////////// Todo page ///////////////
 #eachTask {
+  .titleMenu {
+    display: flex;
+    justify-content: space-between;
+    .multiEdit {
+      position: relative;
+      user-select: none;
+      .barIcon {
+        padding: 0.25rem;
+        font-size: 2em;
+        cursor: pointer;
+      }
+      .editBtn {
+        display: none;
+      }
+      .active {
+        z-index: 3;
+        width: 145px;
+        background-color: rgb(243, 243, 243);
+        position: absolute;
+        top: 40px;
+        right: 0px;
+        box-shadow: 0px 0px 5px gray;
+        border-radius: 4px;
+        overflow: hidden;
+        a {
+          display: block;
+          text-decoration: none;
+          color: black;
+        }
+        .active-item {
+          cursor: pointer;
+          padding: 0.25rem 0.75rem;
+          color: black;
+          margin: 0px !important;
+
+          &:hover {
+            color: rgb(69, 69, 148);
+            background-color: rgb(203, 203, 203);
+          }
+        }
+      }
+    }
+  }
   .itemTag {
     color: gray;
     user-select: none;
@@ -272,6 +313,11 @@
       padding: 0px;
       li {
         list-style: none;
+        display: flex;
+        .checkitem {
+          margin-right: 1rem;
+          align-self: center;
+        }
         .checked {
           display: flex;
           width: 100%;
@@ -378,6 +424,34 @@
       }
     }
   }
+  .addtodoBtn {
+    display: flex;
+    width: 70%;
+    justify-content: center;
+    margin: auto;
+    color: rgb(8, 27, 61);
+    user-select: none;
+    .cancleBtn {
+      background-color: rgb(200, 219, 253);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-right: 3rem;
+      cursor: pointer;
+      &:hover {
+        background-color: rgb(114, 164, 250);
+      }
+    }
+    .addBtn {
+      border: 2px solid rgb(200, 219, 253);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover {
+        border: 2px solid rgb(114, 164, 250);
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     .itemTag {
       ul {

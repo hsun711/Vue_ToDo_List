@@ -1,6 +1,18 @@
 <template>
     <div id="eachTask">
-        <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} :</h1>
+        <div class="titleMenu">
+            <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} :</h1>
+            <div class="multiEdit" v-if="this.$route.query.name !== 'Done'">
+                <div @click="openMultiEditMenu">
+                    <i class="barIcon fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div :class="[this.isOpen ? 'active' : 'editBtn']">
+                    <div class="active-item" @click="chooseItem">
+                        <i class="fa-solid fa-pen"></i> 編輯多個項目
+                    </div>
+                </div>
+            </div>
+        </div> 
         <div class="itemTag">
             <ul>
                 <li v-for="item in formatItemTag" 
@@ -15,6 +27,7 @@
         <div class="taskList">
            <ul>
                 <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.id">
+                    <input type="checkbox" :value="item.id" name="checkInput" class="checkitem" v-if="isCheck">
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">
@@ -53,6 +66,15 @@
                 </li>
             </ul> 
         </div>
+
+        <div class="addtodoBtn">
+            <div class="cancleBtn" @click="cancle" v-if="isCheck">
+                取消
+            </div>
+            <div class="addBtn" v-if="isCheck" @click="submit(taskList)">
+                送出
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -67,6 +89,8 @@ export default {
             isShow: true,
             isExp: false,
             itemid:'',
+            isOpen: false,
+            isCheck: false,
             now: moment().valueOf(),
             type: {
                 work: 'work',
@@ -198,6 +222,31 @@ export default {
             } else {
                 this.itemid = '';
             }
+        },
+
+        openMultiEditMenu(){
+            this.isOpen = !this.isOpen;
+        },
+
+        chooseItem(){
+            this.isCheck = !this.isCheck;
+            this.isOpen = false;
+        },
+
+        cancle(){
+            this.isCheck = false;
+        },
+
+        submit(){
+            const id = document.getElementsByName('checkInput');
+            let value = new Array();
+            for(let i=0; i<id.length; i++){
+                if(id[i].checked){
+                    value.push(id[i].value);
+                }
+            }
+            this.$store.commit('editTodoList',value);
+            window.location.href='#/Add?name=editAll';
         }
 
     },

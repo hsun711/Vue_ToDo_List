@@ -29,6 +29,10 @@ export default {
         localStorage.set('todos', JSON.stringify(state.todos));
     },
 
+    editTodoList(state, payload){
+        state.editTodoList = payload;
+    },
+
     editTask(state, payload){
         const task = [];
         const todos = JSON.parse(JSON.stringify(state.todos));
