@@ -1,14 +1,17 @@
 <template>
     <div id="eachTask">
         <div class="titleMenu">
-            <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} :</h1>
-            <div class="multiEdit" v-if="this.$route.query.name !== 'Done'">
+            <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} : </h1>
+            <div class="multiEdit">
                 <div @click="openMultiEditMenu">
                     <i class="barIcon fa-solid fa-ellipsis-vertical"></i>
                 </div>
                 <div :class="[this.isOpen ? 'active' : 'editBtn']">
-                    <div class="active-item" @click="chooseItem">
+                    <div class="active-item" @click="chooseItem" v-if="this.$route.query.name !== 'Done'">
                         <i class="fa-solid fa-pen"></i> 編輯多個項目
+                    </div>
+                    <div class="active-item" @click="chooseItem" v-if="this.$route.query.name === 'Done'">
+                        <i class="fa-solid fa-trash-can"></i> 刪除多個項目
                     </div>
                 </div>
             </div>
@@ -27,7 +30,7 @@
         <div class="taskList">
            <ul>
                 <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.id">
-                    <input type="checkbox" :value="item.id" name="checkInput" class="checkitem" v-if="isCheck">
+                    <input type="checkbox" :value="item.id" v-model="checkItem" name="checkInput" class="checkitem" v-if="isCheck">
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">
@@ -72,7 +75,7 @@
                 取消
             </div>
             <div class="addBtn" v-if="isCheck" @click="submit(taskList)">
-                送出
+                選擇
             </div>
         </div>
     </div>
@@ -92,6 +95,7 @@ export default {
             isOpen: false,
             isCheck: false,
             now: moment().valueOf(),
+            checkItem: [],
             type: {
                 work: 'work',
                 home: 'home',
@@ -205,6 +209,7 @@ export default {
                     'success'
                     )
                     this.$store.commit('removeTask', itemID);
+                    this.itemid = '';
                 } else {
                     this.itemid = '';
                 }
@@ -238,15 +243,40 @@ export default {
         },
 
         submit(){
-            const id = document.getElementsByName('checkInput');
-            let value = new Array();
-            for(let i=0; i<id.length; i++){
-                if(id[i].checked){
-                    value.push(id[i].value);
-                }
+            if(this.$route.query.name !== 'Done'){
+                this.$store.commit('editTodoList',this.checkItem);
+                window.location.href='#/Add?name=editAll';
+            } else {
+                const checkItem = JSON.parse(JSON.stringify(this.checkItem));
+                const arr = [];
+                checkItem.forEach((item) => {
+                    const itemID = this.itemsID(item);
+                    arr.push(...itemID);
+                })
+
+                Swal.fire({
+                    title: '確定要刪除嗎?',
+                    text: "刪掉就回不來了喔!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                        '已刪除!',
+                        '資料已經回不來了',
+                        'success'
+                        )
+                        this.$store.commit('removeTask',arr);
+                        this.isCheck = false;
+                    } else {
+                        this.checkItem = [];
+                        this.isCheck = false;
+                    }
+                })
             }
-            this.$store.commit('editTodoList',value);
-            window.location.href='#/Add?name=editAll';
         }
 
     },
