@@ -25,11 +25,14 @@ export default {
     },
 
     removeTask(state, payload){
-        const todos = JSON.parse(JSON.stringify(state.todos));
+        let todos = JSON.parse(JSON.stringify(state.todos));
+
         payload.forEach((item) => {
-            todos.splice(state.todos.indexOf(item), 1);
-            state.todos = todos;
+            const remain = todos.filter(todo => todo.id !== item);
+            todos = remain;
         });
+
+        state.todos = todos;
         localStorage.set('todos', JSON.stringify(state.todos));
     },
 

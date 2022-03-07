@@ -74,7 +74,7 @@
             <div class="cancleBtn" @click="cancle" v-if="isCheck">
                 取消
             </div>
-            <div class="addBtn" v-if="isCheck" @click="submit(taskList)">
+            <div class="addBtn" v-if="isCheck" @click="submit">
                 選擇
             </div>
         </div>
@@ -104,8 +104,9 @@ export default {
             },
         };
     },
+    watch:{},
     computed: {
-        ...mapGetters(['itemsID', 'otherItemsID','getItemTag', 'itemsNotDone', 'itemsDone', 'selectTag']),
+        ...mapGetters(['itemsID', 'otherItemsID', 'itemsNotDone', 'itemsDone', 'selectTag','getDoneItemTag','getNotDoneItemTag']),
         taskList(){
             let tasks = [];
             const typeName = !!this.$route.query.name ? this.$route.query.name: "";
@@ -154,20 +155,31 @@ export default {
         },
 
         formatItemTag(){
-            let allTags = JSON.parse(JSON.stringify(this.getItemTag));
-            const newTags = allTags.map((tag) => {
-                const tagArr = {
-                    tagName: tag,
-                    isActive: false,
-                }
-                return tagArr;
-            })
-            return newTags;
-        },
+            let doneTags = JSON.parse(JSON.stringify(this.getDoneItemTag));
+            let notDoneTags = JSON.parse(JSON.stringify(this.getNotDoneItemTag));
 
-        selectTag(){
-            return this.$store.state.selectTag;
-        }
+            if (this.$route.query.name === 'Done') {
+                this.$store.state.selectTag = [];
+                const newTags = doneTags.map((tag) => {
+                    const tagArr = {
+                        tagName: tag,
+                        isActive: false,
+                    }
+                    return tagArr;
+                })
+                return newTags;
+            } else {
+                this.$store.state.selectTag = [];
+                const newTags = notDoneTags.map((tag) => {
+                    const tagArr = {
+                        tagName: tag,
+                        isActive: false,
+                    }
+                    return tagArr;
+                })
+                return newTags;
+            }
+        },
         
     },
     mounted(){
@@ -192,7 +204,8 @@ export default {
         },
 
         removeTask(id){
-            const itemID = this.itemsID(id);
+            const itemID = [];
+            itemID.push(id);
             Swal.fire({
                 title: '確定要刪除嗎?',
                 text: "刪掉就回不來了喔!",
@@ -205,8 +218,6 @@ export default {
                 if (result.isConfirmed) {
                     Swal.fire(
                     '已刪除!',
-                    '資料已經回不來了',
-                    'success'
                     )
                     this.$store.commit('removeTask', itemID);
                     this.itemid = '';
@@ -245,14 +256,9 @@ export default {
         submit(){
             if(this.$route.query.name !== 'Done'){
                 this.$store.commit('editTodoList',this.checkItem);
-                window.location.href='#/Add?name=editAll';
+                window.location.href='#/Add?name=edit';
             } else {
                 const checkItem = JSON.parse(JSON.stringify(this.checkItem));
-                const arr = [];
-                checkItem.forEach((item) => {
-                    const itemID = this.itemsID(item);
-                    arr.push(...itemID);
-                })
 
                 Swal.fire({
                     title: '確定要刪除嗎?',
@@ -266,10 +272,8 @@ export default {
                     if (result.isConfirmed) {
                         Swal.fire(
                         '已刪除!',
-                        '資料已經回不來了',
-                        'success'
                         )
-                        this.$store.commit('removeTask',arr);
+                        this.$store.commit('removeTask',checkItem);
                         this.isCheck = false;
                     } else {
                         this.checkItem = [];

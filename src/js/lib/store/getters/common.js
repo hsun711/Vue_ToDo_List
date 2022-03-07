@@ -27,15 +27,25 @@ export default {
         };
     },
 
-    getItemTag(state){
-        const tagArr = state.todos.map((todo) => {
+    getDoneItemTag(state, getters){
+        const tagArr = getters.itemsDone.map((todo) => {
             const tags = todo.taskTag.split(',');
             return tags;
         });
 
         const newTag = tagArr.reduce((allTag, tag) => allTag.concat(tag), []);
         const allTags = newTag.filter((element, index, arr) => arr.indexOf(element) === index);
+        return allTags;
+    },
 
+    getNotDoneItemTag(state, getters){
+        const tagArr = getters.itemsNotDone.map((todo) => {
+            const tags = todo.taskTag.split(',');
+            return tags;
+        });
+
+        const newTag = tagArr.reduce((allTag, tag) => allTag.concat(tag), []);
+        const allTags = newTag.filter((element, index, arr) => arr.indexOf(element) === index);
         return allTags;
     },
 

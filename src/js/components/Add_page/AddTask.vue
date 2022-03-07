@@ -51,6 +51,7 @@
                     v-model="item.taskTag"
                     class="task"
                     type="text"
+                    placeholder="例如：aaa,bbb"
                 >
             </div>
             <div class="trashCan">
@@ -98,13 +99,14 @@ export default {
             addTodoList: [],
         };
     },
-    watch:{},
+    watch:{
+    },
     computed: {
         ...mapGetters(['itemsID','todos','itemsNotDone']),
         ...mapState(['editTodoList']),
     },
     mounted(){
-        if(this.typeName !== 'Add' && this.typeName === 'editAll'){
+        if(this.typeName !== 'Add' && this.typeName === 'edit'){
             const todos = JSON.parse(JSON.stringify(this.itemsNotDone));
             const editTodoList = JSON.parse(JSON.stringify(this.editTodoList));
             const arr = [];
@@ -121,7 +123,7 @@ export default {
             this.route = true;
             const todos = JSON.parse(JSON.stringify(this.todos));
             const editTask = todos.filter((todo) => {
-                return todo.id === this.$route.query.name;
+                return todo.id === this.typeName;
             })    
             this.addTodoList = editTask;         
         } else{
@@ -147,17 +149,19 @@ export default {
             this.addTodoList.push(data);
         },
         removeTask(index){
-            if(this.typeName !== 'Add' && this.typeName === 'editAll'){
+            if(this.typeName !== 'Add' && this.typeName === 'edit'){
                 const editTodoList = JSON.parse(JSON.stringify(this.editTodoList));
-                const taskId = editTodoList[index]
+                const taskId = [];
+
+                taskId.push(editTodoList[index]);
                 this.addTodoList.splice(index,1)
-                const editTask = this.itemsID(taskId);
-                this.$store.commit('removeTask', editTask);
+                this.$store.commit('removeTask', taskId);
             }
             else if(this.typeName === 'Add'){
                 this.addTodoList.splice(index, 1);
             } else{
-                const editTask = this.itemsID(this.typeName);
+                const editTask = [];
+                editTask.push(this.typeName)
                 this.$store.commit('removeTask', editTask);
                 history.go(-1);
             }
@@ -192,7 +196,7 @@ export default {
                     this.addTodoList = [];
                 } else {
                     Swal.fire({
-                        position: 'center-center',
+                        position: 'center',
                         icon: 'success',
                         title: '修改完成',
                         showConfirmButton: false,
