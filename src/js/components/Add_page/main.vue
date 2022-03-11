@@ -1,20 +1,35 @@
 <template>
     <div id="addPage">
-        <AddTask />
+        <!-- <add-task-container /> -->
+        <add-task-container @input-data-change="getStatus" />
     </div>
 </template>
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import AddTask from './AddTask.vue';
+import AddTaskContainer from './AddTaskContainer.vue';
 
 export default {
     components: {
-        AddTask,
+        AddTaskContainer,
     },
     filters: {},
     props: {},
     data(){
-        return {};
+        return {
+            inputStatus: false,
+        };
+    },
+    beforeRouteLeave(to, from, next){
+        if (this.inputStatus) {
+            const answer = window.confirm('確定要離開嗎,網頁不會保留輸入資訊喔');
+            if (answer === true) {
+                next();
+            } else {
+                next(false);
+            }
+        } else {
+            next();
+        }
     },
     computed: {
         ...mapGetters([
@@ -29,6 +44,9 @@ export default {
     methods: {
         ...mapActions({}),
         ...mapMutations({}),
+        getStatus(status){
+            this.inputStatus = status;
+        },
     },
 };
 </script>

@@ -11,7 +11,6 @@ import { mapActions, mapMutations, mapGetters } from 'vuex';
 import { localStorage } from 'lib/common/util';
 import Header from '../Header/main.vue';
 
-
 const pc_min_size = 567;
 
 export default {
@@ -32,6 +31,8 @@ export default {
         route(){
             return this.$route;
         },
+    },
+    watch: {
     },
     created(){},
     mounted(){

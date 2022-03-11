@@ -28,13 +28,13 @@
             </ul>
         </div>
         <div class="taskList">
-           <ul>
+           <ul id="infiniteList">
                 <li v-for="item in taskList" v-show="isShow && item.isTag" :key="item.id">
                     <input type="checkbox" :value="item.id" v-model="checkItem" name="checkInput" class="checkitem" v-if="isCheck">
                     <div class="checked" :class="type[`${item.taskType}`]">
                         <div class="taskText">
                             <div class="taskTitle">
-                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday}">
+                                <h4 @click="turnDone(item.id)" :class="{'exp': item.isToday, 'doneStyle': item.isDone}">
                                     {{ item.taskName }}
                                 </h4>
                                 <h6 v-if="item.time < now - 86400000 && item.isDone === false" style="color: red">

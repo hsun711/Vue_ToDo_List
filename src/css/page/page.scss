@@ -66,6 +66,8 @@
 
 #routerPage {
   width: 80%;
+  // height: 600px;
+  // overflow: scroll;
   margin: 0vmin auto 3rem;
   display: flex;
   flex-direction: column;
@@ -236,6 +238,7 @@
 
 /////////////// Todo page ///////////////
 #eachTask {
+  // height: 450px;
   .titleMenu {
     display: flex;
     justify-content: space-between;
@@ -309,6 +312,9 @@
   .taskList {
     margin: 1rem auto;
     width: 90%;
+    // height: 90%;
+    // outline: 1px solid red;
+    // overflow: scroll;
     ul {
       padding: 0px;
       li {
@@ -345,12 +351,26 @@
             width: 70%;
             .taskTitle {
               margin-bottom: 0.75rem;
-              .exp:before {
+              position: relative;
+              .exp::before {
                 color: red;
                 font-size: 1.5rem;
                 font-family: "Font Awesome 5 Free";
                 font-weight: 900;
                 content: "\f06d";
+              }
+              .doneStyle {
+                &:hover::after {
+                  position: absolute;
+                  top: 30px;
+                  left: 0px;
+                  color: #fff;
+                  font-size: 0.8rem;
+                  background: #346e7a;
+                  padding: 5px;
+                  border-radius: 5px;
+                  content: "移回待辦頁面";
+                }
               }
               h4 {
                 margin: auto;
