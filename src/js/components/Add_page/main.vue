@@ -1,6 +1,5 @@
 <template>
     <div id="addPage">
-        <!-- <add-task-container /> -->
         <add-task-container @input-data-change="getStatus" />
     </div>
 </template>

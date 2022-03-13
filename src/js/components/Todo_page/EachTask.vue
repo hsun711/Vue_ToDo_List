@@ -2,7 +2,7 @@
     <div id="eachTask">
         <div class="titleMenu">
             <h1>{{ this.$route.query.name === 'Done' ? "完成項目":"待辦項目" }} : </h1>
-            <div class="multiEdit">
+            <div class="multiEdit" v-if="taskList.length > 0">
                 <div @click="openMultiEditMenu">
                     <i class="barIcon fa-solid fa-ellipsis-vertical"></i>
                 </div>

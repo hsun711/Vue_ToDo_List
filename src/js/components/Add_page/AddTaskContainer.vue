@@ -40,12 +40,10 @@ export default {
                 friend: 'friend',
                 other: 'other',
             },
-            todoArr: [],
             addTodoList: [],
         };
     },
-    watch:{
-    },
+    watch:{},
     computed: {
         ...mapGetters(['itemsID','todos','itemsNotDone']),
         ...mapState(['editTodoList']),
@@ -94,19 +92,23 @@ export default {
             this.addTodoList.push(data);
         },
         removeTodo(item){
+            const todoList = JSON.parse(JSON.stringify(this.addTodoList))
+
             if(this.routeName !== 'Add' && this.routeName === 'edit'){
+
                 const editTodoList = JSON.parse(JSON.stringify(this.editTodoList));
                 const taskId = [];
                 const index = editTodoList.indexOf(item.item.id)
-                const itemIndex = item.index;
 
                 taskId.push(editTodoList[index]);
 
-                this.addTodoList.splice(itemIndex,1)
+                todoList.splice(item.index, 1);
+                this.addTodoList = todoList;
                 this.$store.commit('removeTask', taskId);
             }
             else if(this.routeName === 'Add'){
-                this.addTodoList.splice(item.index, 1);
+                todoList.splice(item.index, 1);
+                this.addTodoList = todoList;
             } else {
                 const editTask = [];
                 editTask.push(this.routeName)
@@ -162,7 +164,6 @@ export default {
                 if(item.item.id === ''){
                     todoList[item.index] = item.item;
                     this.addTodoList = todoList;
-
                     this.isInputChange = true;
                     this.$emit('input-data-change',this.isInputChange)
 
