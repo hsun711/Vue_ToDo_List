@@ -88,6 +88,18 @@ export default {
         ]),
     },
     watch: {
+        item: {
+            deep: true,
+            handler(val){
+                const item = JSON.stringify(this.item);
+                const inputItem = JSON.stringify(this.inputItem);
+                if(item !== inputItem){
+                    this.inputItem = JSON.parse(item);
+                }
+
+            }
+        },
+
         inputItem: {
             deep: true,
             handler(val){
