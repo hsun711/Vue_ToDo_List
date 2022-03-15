@@ -113,6 +113,8 @@ export default {
                 const editTask = [];
                 editTask.push(this.routeName)
                 this.$store.commit('removeTask', editTask);
+                this.isInputChange = false;
+                this.$emit('input-data-change',this.isInputChange)
                 history.go(-1);
             }
         },
